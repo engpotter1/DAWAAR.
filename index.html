@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dawaar Parking | دوار باركينج</title>
+    
+    <!-- Google Fonts (Cairo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons (v6) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-black: #0a0a0c;
+            --card-bg: rgba(18, 18, 20, 0.75);
+            --gold-main: #d4af37;
+            --gold-light: #f9e8a2;
+            --gold-gradient: linear-gradient(135deg, #d4af37 0%, #fff2b2 50%, #aa771c 100%);
+            --white: #ffffff;
+            --text-muted: #b0b0b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- خلفية متحركة احترافية (Cinematic Background Animation) --- */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80&w=1920&auto=format&fit=crop'); /* صورة باركينج فاخرة */
+            background-size: cover;
+            background-position: center;
+            animation: moveBackground 25s ease-in-out infinite alternate;
+        }
+
+        @keyframes moveBackground {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+            50% {
+                transform: scale(1.15) translate(-20px, -10px);
+            }
+            100% {
+                transform: scale(1.05) translate(20px, 15px);
+            }
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(10, 10, 12, 0.75) 0%, rgba(5, 5, 6, 0.95) 100%);
+            z-index: -1;
+        }
+
+        /* --- الهيدر واللوجو --- */
+        header {
+            padding: 25px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 12, 0.4);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            animation: fadeInDown 1s ease;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            -webkit-text-fill-color: var(--gold-main);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
+
+        /* --- المحتوى الرئيسي --- */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: var(--white);
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-title span {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .hero-desc {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            line-height: 1.8;
+            margin-bottom: 35px;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        /* كروت الخدمات بتأثير الزجاج */
+        .cards-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            padding: 25px 30px;
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            width: 260px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold-main);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.25);
+        }
+
+        .card i {
+            font-size: 2.2rem;
+            color: var(--gold-main);
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .card:hover i {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--white);
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- الفوتر والسوشيال ميديا (Footer) --- */
+        footer {
+            background: rgba(8, 8, 10, 0.85);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(212, 175, 55, 0.25);
+            padding: 35px 20px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .social-title {
+            font-size: 1.1rem;
+            color: var(--gold-light);
+            letter-spacing: 1px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            color: var(--white);
+            font-size: 1.3rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ألوان وهوفر السوشيال ميديا */
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gold-gradient);
+            opacity: 0;
+            transition: 0.3s;
+            z-index: -1;
+        }
+
+        .social-btn:hover {
+            color: #000;
+            border-color: #fff;
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .social-btn:hover::before {
+            opacity: 1;
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .copyright span {
+            color: var(--gold-main);
+        }
+
+        /* --- الحركات (Animations) --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* تجاوب الشاشات الصغيرة (Responsive) */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.3rem; }
+            .hero-desc { font-size: 1rem; }
+            .card { width: 100%; max-width: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الخلفية التفاعلية المتحركة -->
+    <div class="bg-container">
+        <div class="bg-image"></div>
+    </div>
+    <div class="bg-overlay"></div>
+
+    <!-- الهيدر -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-square-parking"></i>
+            <span>Dawaar Parking</span>
+        </div>
+    </header>
+
+    <!-- المحتوى -->
+    <main>
+        <h1 class="hero-title">مرحباً بكم في <span>دوار باركينج</span></h1>
+        <p class="hero-desc">حلول ذكية، أمان متكامل، وتجربة ركن فاخرة لسيارتك بأعلى معايير الراحة والتكنولوجيا الحديثة.</p>
+
+        <!-- كروت مميزات -->
+        <div class="cards-container">
+            <div class="card">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>أمان متكامل 24/7</h3>
+                <p>حراسة مشددة وكاميرات مراقبة متطورة لحماية سيارتك على مدار الساعة.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-bolt"></i>
+                <h3>دخول وخروج ذكي</h3>
+                <p>أنظمة إلكترونية سريعة لتسهيل الحركة دون أي انتظار أو تعقيد.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-crown"></i>
+                <h3>خدمة VIP</h3>
+                <p>مساحات مخصصة واعتناء خاص لضمان أفضل تجربة لك ولسيارتك.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- الفوتر مع اللينكات -->
+    <footer>
+        <div class="social-title">تواصل معنا عبر منصاتنا الرسمية</div>
+        
+        <div class="social-links">
+            <!-- يوتيوب -->
+            <a href="https://www.youtube.com/@DawaarParking" target="_blank" class="social-btn" title="YouTube">
+                <i class="fa-brands fa-youtube"></i>
+            </a>
+
+            <!-- فيسبوك -->
+            <a href="https://www.facebook.com/DawaarParking/" target="_blank" class="social-btn" title="Facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+            </a>
+
+            <!-- انستجرام -->
+            <a href="https://www.instagram.com/dawaarparking/" target="_blank" class="social-btn" title="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+
+            <!-- ثريدز -->
+            <a href="https://www.threads.com/@dawaarparking?xmt=AQG0gzPF6x0ZJ50lf2lsxE7zrUbfP-Whq-fYhpKV3B-71Xo" target="_blank" class="social-btn" title="Threads">
+                <i class="fa-brands fa-threads"></i>
+            </a>
+
+            <!-- إكس (تويتر سابقاً) -->
+            <a href="https://x.com/DawaarParking" target="_blank" class="social-btn" title="X (Twitter)">
+                <i class="fa-brands fa-x-twitter"></i>
+            </a>
+        </div>
+
+        <div class="copyright">
+            جميع الحقوق محفوظة &copy; 2025 لـ <span>Dawaar Parking</span>
+        </div>
+    </footer>
+
+</body>
+</html>
