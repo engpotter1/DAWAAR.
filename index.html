@@ -1,11 +1,3 @@
-إليك الكود بالكامل بدون اختصار لأي سطر، ومدمج به كل الميزات المطلوبة:
-
-1. **شاشة افتتاحية سينمائية سوداء (Splash Screen):** تظهر أول ما الموقع يفتح، وفيها عبارة **"ركنتك مستنياك.. أهلاً بك في دوَّر"** بتأثير ظهور مبهر من العدم، تكبير ناعم وتوهج ذهبي، وبعدها تختفي بانسيابية لتدخل للموقع.
-2. **ماوس مخصص احترافي (Custom Luxury Cursor):** نقطة وهج مركزية مع هالة ذهبية ناعمة بتكبر لما تقف على الزراير واللينكات وتلغي الماوس التقليدي.
-3. **أثر أنوار وجزيئات مضيئة ورا حركة الماوس (Light Particles Trail):** ذرات نور بتنور وتتلاشى برقة مع كل حركة للماوس.
-4. **تجاوب كامل واحترافي للموبايل (Mobile Responsive UI):** تعديل كامل للشبكة والـ Padding وشبكة الركنات والبطاقات عشان تظهر على شاشة الموبايل بنفس الفخامة والترتيب بدون أي تشويه.
-
-```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -49,12 +41,6 @@
     font-family:'Tajawal',sans-serif;
     overflow-x:hidden;
     position:relative;
-  }
-  
-  @media (pointer:fine) {
-    body, a, button, select, input {
-      cursor: none !important;
-    }
   }
 
   h1,h2,h3,h4,.display{font-family:'Cairo',sans-serif;}
@@ -138,39 +124,7 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ---------- CUSTOM CURSOR & LIGHT TRAILS ---------- */
-  .cursor-dot {
-    position: fixed;
-    top: 0; left: 0;
-    width: 8px; height: 8px;
-    background: #ffffff;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 100000;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px #ffffff, 0 0 20px var(--gold);
-    transition: width .2s, height .2s, background-color .2s;
-  }
-  .cursor-ring {
-    position: fixed;
-    top: 0; left: 0;
-    width: 36px; height: 36px;
-    border: 1.5px solid rgba(242, 217, 138, 0.65);
-    background: rgba(205, 164, 52, 0.08);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99999;
-    transform: translate(-50%, -50%);
-    transition: width .25s var(--ease), height .25s var(--ease), border-color .25s, transform .08s linear;
-    box-shadow: 0 0 15px rgba(205, 164, 52, 0.2);
-  }
-  .cursor-ring.active {
-    width: 55px;
-    height: 55px;
-    border-color: var(--gold-light);
-    background: rgba(205, 164, 52, 0.22);
-    box-shadow: 0 0 25px rgba(205, 164, 52, 0.5);
-  }
+  /* ---------- LIGHT TRAILS ---------- */
   .trail-particle {
     position: fixed;
     pointer-events: none;
@@ -183,11 +137,6 @@
   @keyframes particleFade {
     0% { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
     100% { opacity: 0; transform: translate(-50%, -50%) scale(0.1); }
-  }
-
-  @media (pointer: coarse) {
-    .cursor-dot, .cursor-ring, .trail-particle { display: none !important; }
-    body, a, button, select, input { cursor: auto !important; }
   }
 
   /* ---------- animated moving background ---------- */
@@ -287,7 +236,7 @@
   .brand-text .ar{ font-family:'Cairo',sans-serif; font-weight:800; font-size:19px; line-height:1.1;}
   .brand-text .en{ font-size:10.5px; letter-spacing:3px; color:var(--muted); font-family:'Cairo',sans-serif;}
   .nav-links{ display:flex; align-items:center; gap:34px; }
-  .nav-links a{ color:var(--muted); text-decoration:none; font-size:15px; font-weight:500; transition:color .25s var(--ease); position:relative;}
+  .nav-links a{ color:var(--muted); text-decoration:none; font-size:15px; font-weight:500; transition:color .25s var(--ease); position:relative; cursor:pointer; }
   .nav-links a:hover{ color:var(--white); }
   .nav-links a::after{ content:""; position:absolute; right:0; bottom:-6px; width:0; height:1px; background:var(--gold); transition:width .3s var(--ease); }
   .nav-links a:hover::after{ width:100%; }
@@ -300,6 +249,7 @@
     box-shadow:0 6px 22px rgba(205,164,52,0.28);
     transition:transform .3s var(--ease), box-shadow .3s var(--ease);
     position:relative; overflow:hidden;
+    cursor:pointer;
   }
   .btn-gold::before{
     content:""; position:absolute; top:-50%; left:-75%; width:50%; height:200%;
@@ -318,6 +268,7 @@
     font-family:'Cairo',sans-serif; font-weight:600; font-size:14.5px;
     color:var(--white); background:transparent; border:1px solid var(--hairline);
     border-radius:11px; padding:11px 22px; transition:all .3s var(--ease);
+    cursor:pointer;
   }
   .btn-ghost:hover{ border-color:var(--gold); background:rgba(205,164,52,0.08); transform: translateY(-2px); }
 
@@ -354,6 +305,7 @@
   .filter-field select{
     width:100%; background:transparent; border:none; color:var(--white); font-family:'Tajawal',sans-serif;
     font-size:14.5px; font-weight:500; outline:none; appearance:none;
+    cursor:pointer;
   }
   .filter-field select option{ background:var(--charcoal); color:var(--white); }
   .filter-bar .btn-gold{ padding:0 26px; white-space:nowrap; justify-content: center; }
@@ -435,7 +387,7 @@
 
   .slot svg{ width:16px; height:16px; transition:transform .3s var(--ease); }
   
-  .slot.available{ background:rgba(95,174,126,0.10); border-color:rgba(95,174,126,0.5); color:var(--available); }
+  .slot.available{ background:rgba(95,174,126,0.10); border-color:rgba(95,174,126,0.5); color:var(--available); cursor:pointer; }
   .slot.available::after{
     content:""; position:absolute; inset:-4px; border-radius:12px;
     border:1px dashed var(--available); opacity:0;
@@ -451,7 +403,7 @@
   .slot.reserved{ background:rgba(217,154,61,0.10); border-color:rgba(217,154,61,0.45); color:var(--reserved); }
   .slot.occupied{ background:rgba(163,74,74,0.10); border-color:rgba(163,74,74,0.4); color:var(--occupied); opacity:0.75; }
   
-  .slot.special{ background:rgba(176,135,214,0.10); border-color:rgba(176,135,214,0.5); color:var(--special); }
+  .slot.special{ background:rgba(176,135,214,0.10); border-color:rgba(176,135,214,0.5); color:var(--special); cursor:pointer; }
   .slot.special.ev-slot{
     box-shadow: inset 0 0 12px rgba(176,135,214,0.2);
     animation: electricPulse 3s infinite alternate;
@@ -626,10 +578,6 @@
     <p class="splash-sub">SMART PARKING EXPERIENCE</p>
   </div>
 </div>
-
-<!-- CUSTOM CURSOR -->
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
 
 <div class="bg-scene">
   <div class="beam b1"></div>
@@ -830,7 +778,7 @@
     </div>
     <div class="social-row">
       <a class="social-btn" href="https://www.youtube.com/@DawaarParking" target="_blank" rel="noopener" aria-label="يوتيوب">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.5V8.5l6.3 3.5-6.3 3.5Z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.5V8.5l6.3 3.5-6.3 3.5Z"/></svg>
       </a>
       <a class="social-btn" href="https://www.facebook.com/DawaarParking/" target="_blank" rel="noopener" aria-label="فيسبوك">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg>
@@ -848,7 +796,7 @@
   </div>
   <div class="footer-bottom">
     <div>Smart Parking Concept · Course Prototype · © 2026</div>
-    <div>Developed by <b>Salma Ahmed</b></div>
+    <div>Developed by <b>Salma Ahmed</b>[cite: 1]</div>
   </div>
 </footer>
 
@@ -898,34 +846,16 @@
     }, 2200);
   });
 
-  // ---------- CUSTOM CURSOR & LIGHT TRAIL ----------
-  const cursorDot = document.getElementById('cursorDot');
-  const cursorRing = document.getElementById('cursorRing');
-  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-  let ringX = mouseX, ringY = mouseY;
+  // ---------- LIGHT TRAIL WITH MOUSE ----------
   let lastTrailTime = 0;
-
   if (window.matchMedia('(pointer:fine)').matches) {
     window.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
-
-      // Create Light trail particles
       const now = performance.now();
       if (now - lastTrailTime > 25) {
         lastTrailTime = now;
-        createTrailParticle(mouseX, mouseY);
+        createTrailParticle(e.clientX, e.clientY);
       }
     });
-
-    function renderRing() {
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
-      cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
-      requestAnimationFrame(renderRing);
-    }
-    requestAnimationFrame(renderRing);
 
     function createTrailParticle(x, y) {
       const particle = document.createElement('div');
@@ -941,19 +871,6 @@
         particle.remove();
       }, 700);
     }
-
-    // Hover effect on interactive elements
-    const interactive = 'a, button, select, .slot.available, .slot.special, .metric-card, .feat-card, .step-card';
-    document.addEventListener('mouseover', (e) => {
-      if (e.target.closest(interactive)) {
-        cursorRing.classList.add('active');
-      }
-    });
-    document.addEventListener('mouseout', (e) => {
-      if (e.target.closest(interactive)) {
-        cursorRing.classList.remove('active');
-      }
-    });
   }
 
   // ---------- generate parking grid ----------
@@ -1109,5 +1026,3 @@
 </script>
 </body>
 </html>
-
-```
