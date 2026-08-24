@@ -1,374 +1,888 @@
+إليك الكود بالكامل بدون اختصار أي جزء، مع إضافة كل التأثيرات والأنيميشن التفاعلية (تأثير المنظور المجسم 3D Interactive Perspective، الـ 3D Tilt للبطاقات مع حركة الماوس، إضاءة الـ Spotlight والتوهج النيوني المتحرك لحواف الكروت وشواحن الـ EV، نبضات الرادار اللحظية، أنيميشن الركن التفاعلي للسيارة عند تأكيد الحجز، ولمعان الأزرار المعدني):
+
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dawaar Parking | دوار باركينج</title>
-    
-    <!-- Google Fonts (Cairo) -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome Icons (v6) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دوَّر | DAWWAR — Smart Parking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#050505;
+    --black-soft:#0d0d0c;
+    --charcoal:#161513;
+    --charcoal-2:#1f1d19;
+    --hairline:rgba(205,164,52,0.18);
+    --gold:#cda43a;
+    --gold-light:#f2d98a;
+    --gold-deep:#8a6a22;
+    --white:#f8f5ee;
+    --muted:#a89f8e;
+    --muted-dim:#6f6858;
 
-    <style>
-        :root {
-            --bg-black: #0a0a0c;
-            --card-bg: rgba(18, 18, 20, 0.75);
-            --gold-main: #d4af37;
-            --gold-light: #f9e8a2;
-            --gold-gradient: linear-gradient(135deg, #d4af37 0%, #fff2b2 50%, #aa771c 100%);
-            --white: #ffffff;
-            --text-muted: #b0b0b0;
-        }
+    --available:#5fae7e;
+    --available-glow:rgba(95,174,126,0.45);
+    --reserved:#d99a3d;
+    --reserved-glow:rgba(217,154,61,0.45);
+    --occupied:#a34a4a;
+    --occupied-glow:rgba(163,74,74,0.45);
+    --special:#b087d6;
+    --special-glow:rgba(176,135,214,0.45);
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
+    --radius:14px;
+    --ease:cubic-bezier(.19,1,.22,1);
+  }
 
-        body {
-            background-color: var(--bg-black);
-            color: var(--white);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            position: relative;
-        }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--black);
+    color:var(--white);
+    font-family:'Tajawal',sans-serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+  h1,h2,h3,h4,.display{font-family:'Cairo',sans-serif;}
 
-        /* --- خلفية متحركة احترافية (Cinematic Background Animation) --- */
-        .bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
-        }
+  ::selection{background:var(--gold);color:var(--black);}
 
-        .bg-image {
-            width: 100%;
-            height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80&w=1920&auto=format&fit=crop'); /* صورة باركينج فاخرة */
-            background-size: cover;
-            background-position: center;
-            animation: moveBackground 25s ease-in-out infinite alternate;
-        }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
 
-        @keyframes moveBackground {
-            0% {
-                transform: scale(1) translate(0, 0);
-            }
-            50% {
-                transform: scale(1.15) translate(-20px, -10px);
-            }
-            100% {
-                transform: scale(1.05) translate(20px, 15px);
-            }
-        }
+  /* ---------- animated moving background ---------- */
+  .bg-scene{
+    position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none;
+    background:
+      radial-gradient(ellipse 60% 45% at 20% 15%, rgba(205,164,52,0.10), transparent 60%),
+      radial-gradient(ellipse 55% 40% at 85% 80%, rgba(205,164,52,0.08), transparent 60%),
+      linear-gradient(180deg, #050505 0%, #0a0906 45%, #050505 100%);
+  }
+  .bg-scene::before{
+    content:"";
+    position:absolute; inset:-10%;
+    background-image:
+      linear-gradient(rgba(205,164,52,0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(205,164,52,0.055) 1px, transparent 1px);
+    background-size: 64px 64px;
+    transform: perspective(600px) rotateX(55deg) scale(1.6);
+    transform-origin: center 20%;
+    animation: gridDrift 14s linear infinite;
+    opacity:0.5;
+  }
+  @keyframes gridDrift{
+    from{ background-position: 0 0, 0 0; }
+    to{ background-position: 0 64px, 64px 0; }
+  }
+  .beam{
+    position:absolute;
+    width:2px;
+    height:140%;
+    top:-20%;
+    background:linear-gradient(180deg, transparent, rgba(242,217,138,0.5), transparent);
+    filter:blur(1px);
+    animation: beamSweep linear infinite;
+    opacity:0.55;
+  }
+  .beam.b1{left:8%; animation-duration:9s; animation-delay:0s;}
+  .beam.b2{left:34%; animation-duration:13s; animation-delay:2s;}
+  .beam.b3{left:62%; animation-duration:11s; animation-delay:4s;}
+  .beam.b4{left:88%; animation-duration:16s; animation-delay:1s;}
+  @keyframes beamSweep{
+    0%{ transform:translateY(-30%) rotate(3deg); opacity:0; }
+    10%{ opacity:0.6; }
+    90%{ opacity:0.6; }
+    100%{ transform:translateY(30%) rotate(3deg); opacity:0; }
+  }
+  .orb{
+    position:absolute; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, rgba(242,217,138,0.55), rgba(205,164,52,0.05) 70%);
+    filter:blur(4px);
+    animation: orbFloat 22s ease-in-out infinite;
+  }
+  .orb.o1{width:280px; height:280px; top:8%; left:-5%; animation-duration:26s;}
+  .orb.o2{width:200px; height:200px; bottom:5%; right:-3%; animation-duration:19s; animation-delay:3s;}
+  .orb.o3{width:140px; height:140px; top:55%; left:45%; animation-duration:24s; animation-delay:6s; opacity:0.5;}
+  @keyframes orbFloat{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    33%{ transform:translate(30px,-40px) scale(1.08); }
+    66%{ transform:translate(-25px,25px) scale(0.94); }
+  }
 
-        .bg-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(10, 10, 12, 0.75) 0%, rgba(5, 5, 6, 0.95) 100%);
-            z-index: -1;
-        }
+  section, header, footer{ position:relative; z-index:1; }
 
-        /* --- الهيدر واللوجو --- */
-        header {
-            padding: 25px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            background: rgba(10, 10, 12, 0.4);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            animation: fadeInDown 1s ease;
-        }
+  /* ---------- layout helpers ---------- */
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Cairo',sans-serif; font-weight:700; font-size:12.5px;
+    letter-spacing:1.5px; color:var(--gold-light);
+    border:1px solid var(--hairline); border-radius:999px;
+    padding:7px 16px; background:rgba(205,164,52,0.06);
+    position:relative; overflow:hidden;
+  }
+  .eyebrow::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--gold); box-shadow:0 0 8px var(--gold); animation: pulse 1.5s infinite;}
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+  /* ---------- nav ---------- */
+  .nav{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(5,5,5,0.72);
+    border-bottom:1px solid var(--hairline);
+  }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1180px; margin:0 auto; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-badge{
+    width:44px; height:44px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(155deg, var(--gold-light), var(--gold) 55%, var(--gold-deep));
+    color:var(--black); font-family:'Cairo',sans-serif; font-weight:900; font-size:20px;
+    box-shadow:0 4px 18px rgba(205,164,52,0.35);
+    transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  }
+  .brand:hover .brand-badge{
+    transform: rotate(10deg) scale(1.08);
+    box-shadow: 0 6px 25px rgba(205,164,52,0.6);
+  }
+  .brand-text .ar{ font-family:'Cairo',sans-serif; font-weight:800; font-size:19px; line-height:1.1;}
+  .brand-text .en{ font-size:10.5px; letter-spacing:3px; color:var(--muted); font-family:'Cairo',sans-serif;}
+  .nav-links{ display:flex; align-items:center; gap:34px; }
+  .nav-links a{ color:var(--muted); text-decoration:none; font-size:15px; font-weight:500; transition:color .25s var(--ease); position:relative;}
+  .nav-links a:hover{ color:var(--white); }
+  .nav-links a::after{ content:""; position:absolute; right:0; bottom:-6px; width:0; height:1px; background:var(--gold); transition:width .3s var(--ease); }
+  .nav-links a:hover::after{ width:100%; }
 
-        .logo i {
-            -webkit-text-fill-color: var(--gold-main);
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-        }
+  .btn-gold{
+    font-family:'Cairo',sans-serif; font-weight:700; font-size:14.5px;
+    color:var(--black); background:linear-gradient(120deg, var(--gold-light), var(--gold));
+    border:none; border-radius:11px; padding:12px 24px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px;
+    box-shadow:0 6px 22px rgba(205,164,52,0.28);
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+    position:relative; overflow:hidden;
+  }
+  .btn-gold::before{
+    content:""; position:absolute; top:-50%; left:-75%; width:50%; height:200%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transform:rotate(25deg);
+    animation: shimmerButton 4s infinite;
+  }
+  @keyframes shimmerButton{
+    0% { left: -75%; }
+    30%, 100% { left: 140%; }
+  }
+  .btn-gold:hover{ transform:translateY(-3px) scale(1.02); box-shadow:0 12px 30px rgba(205,164,52,0.5); }
+  .btn-gold:active{ transform:scale(0.97); }
 
-        /* --- المحتوى الرئيسي --- */
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 40px 20px;
-            z-index: 1;
-        }
+  .btn-ghost{
+    font-family:'Cairo',sans-serif; font-weight:600; font-size:14.5px;
+    color:var(--white); background:transparent; border:1px solid var(--hairline);
+    border-radius:11px; padding:11px 22px; cursor:pointer; transition:all .3s var(--ease);
+  }
+  .btn-ghost:hover{ border-color:var(--gold); background:rgba(205,164,52,0.08); transform: translateY(-2px); }
 
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 900;
-            margin-bottom: 15px;
-            color: var(--white);
-            animation: fadeInUp 1s ease 0.2s both;
-        }
+  .mobile-toggle{ display:none; background:none; border:1px solid var(--hairline); color:var(--white); width:40px; height:40px; border-radius:8px; }
 
-        .hero-title span {
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
-        }
+  /* ---------- hero ---------- */
+  .hero{ padding:96px 0 70px; text-align:center; }
+  .hero .eyebrow{ margin-bottom:26px; }
+  .hero h1{
+    font-size:clamp(32px,5.2vw,58px); font-weight:900; line-height:1.28;
+    max-width:920px; margin:0 auto 22px;
+  }
+  .grad-text{
+    background:linear-gradient(100deg, var(--gold-light), var(--gold) 45%, var(--gold-deep));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    background-size:200% auto; animation:shine 6s linear infinite;
+  }
+  @keyframes shine{ to{ background-position:200% center; } }
+  .hero p.lead{ max-width:640px; margin:0 auto 44px; color:var(--muted); font-size:16.5px; line-height:1.9; }
 
-        .hero-desc {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 650px;
-            line-height: 1.8;
-            margin-bottom: 35px;
-            animation: fadeInUp 1s ease 0.4s both;
-        }
+  .filter-bar{
+    max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr 1fr auto;
+    gap:12px; background:var(--charcoal); border:1px solid var(--hairline);
+    padding:14px; border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,0.45);
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s;
+  }
+  .filter-bar:hover{
+    box-shadow: 0 25px 70px rgba(205,164,52,0.12);
+    border-color: rgba(205,164,52,0.35);
+  }
+  .filter-field{ text-align:right; padding:6px 14px; border-radius:12px; background:var(--black-soft); border:1px solid transparent; transition:border-color .25s, transform .25s; }
+  .filter-field:hover, .filter-field:focus-within{ border-color:var(--hairline); transform: translateY(-2px); }
+  .filter-field label{ display:block; font-size:11px; color:var(--muted-dim); margin-bottom:3px; font-family:'Cairo',sans-serif; }
+  .filter-field select{
+    width:100%; background:transparent; border:none; color:var(--white); font-family:'Tajawal',sans-serif;
+    font-size:14.5px; font-weight:500; outline:none; appearance:none; cursor:pointer;
+  }
+  .filter-field select option{ background:var(--charcoal); color:var(--white); }
+  .filter-bar .btn-gold{ padding:0 26px; white-space:nowrap; }
 
-        /* كروت الخدمات بتأثير الزجاج */
-        .cards-container {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 30px;
-            animation: fadeInUp 1s ease 0.6s both;
-        }
+  /* ---------- dashboard ---------- */
+  .dashboard{ padding:70px 0 30px; }
+  .metric-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; perspective:1000px; }
+  .metric-card{
+    background:linear-gradient(160deg, var(--charcoal), var(--charcoal-2));
+    border:1px solid var(--hairline); border-radius:var(--radius); padding:26px 22px;
+    transition:transform .35s var(--ease), border-color .35s, box-shadow .35s;
+    position:relative; overflow:hidden;
+    transform-style:preserve-3d;
+  }
+  .metric-card::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(205,164,52,0.15), transparent 70%);
+    opacity:0; transition:opacity .3s; pointer-events:none;
+  }
+  .metric-card:hover::before{ opacity:1; }
+  .metric-card:hover{
+    transform:translateY(-8px) scale(1.02);
+    border-color:rgba(205,164,52,0.5);
+    box-shadow: 0 15px 35px rgba(205,164,52,0.15);
+  }
+  .metric-icon{ width:38px; height:38px; margin-bottom:16px; color:var(--gold); transition:transform .3s var(--ease); }
+  .metric-card:hover .metric-icon{ transform:scale(1.15) rotate(-5deg); }
+  .metric-num{ font-family:'Cairo',sans-serif; font-weight:900; font-size:34px; color:var(--gold-light); }
+  .metric-label{ margin-top:6px; color:var(--muted); font-size:13.5px; line-height:1.6; }
 
-        .card {
-            background: var(--card-bg);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            padding: 25px 30px;
-            border-radius: 16px;
-            backdrop-filter: blur(12px);
-            width: 260px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
+  /* ---------- section header shared ---------- */
+  .sec-head{ text-align:center; max-width:640px; margin:0 auto 46px; }
+  .sec-head h2{ font-size:clamp(26px,3.4vw,38px); font-weight:800; margin-top:16px; line-height:1.4; }
 
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--gold-main);
-            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.25);
-        }
+  /* ---------- parking ---------- */
+  .parking{ padding:100px 0; perspective: 1400px; }
+  .legend{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-bottom:36px; }
+  .legend-chip{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); background:var(--charcoal); border:1px solid var(--hairline); padding:8px 14px; border-radius:999px; transition:transform .25s, border-color .25s; }
+  .legend-chip:hover{ transform:translateY(-2px); border-color:var(--gold); }
+  .legend-dot{ width:9px; height:9px; border-radius:50%; }
+  .dot-available{ background:var(--available); box-shadow:0 0 8px var(--available-glow); }
+  .dot-reserved{ background:var(--reserved); box-shadow:0 0 8px var(--reserved-glow); }
+  .dot-occupied{ background:var(--occupied); box-shadow:0 0 8px var(--occupied-glow); }
+  .dot-special{ background:var(--special); box-shadow:0 0 8px var(--special-glow); }
 
-        .card i {
-            font-size: 2.2rem;
-            color: var(--gold-main);
-            margin-bottom: 15px;
-            transition: 0.3s;
-        }
+  .floor-bar{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--charcoal); border:1px solid var(--hairline); border-radius:14px 14px 0 0;
+    padding:16px 24px; border-bottom:none;
+  }
+  .floor-title{ font-family:'Cairo',sans-serif; font-weight:700; font-size:15px; }
+  .floor-title span{ color:var(--muted-dim); font-weight:500; font-size:13px; }
+  .live-badge{ display:flex; align-items:center; gap:7px; font-size:12px; color:var(--available); font-family:'Cairo',sans-serif; font-weight:600; }
+  .live-dot{ width:7px; height:7px; border-radius:50%; background:var(--available); animation:pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.4; transform:scale(1.4);} }
 
-        .card:hover i {
-            transform: scale(1.15) rotate(5deg);
-        }
+  .parking-container-3d{
+    transform-style: preserve-3d;
+    transition: transform 0.6s var(--ease);
+  }
+  .grid-panel{
+    background:radial-gradient(ellipse at top, rgba(205,164,52,0.05), transparent 60%), var(--black-soft);
+    border:1px solid var(--hairline); border-radius:0 0 14px 14px; padding:34px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    position:relative;
+  }
+  .slot-grid{ display:grid; grid-template-columns:repeat(8,1fr); gap:12px; }
+  
+  .slot{
+    aspect-ratio:1/0.85; border-radius:10px; border:1px solid;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    font-family:'Cairo',sans-serif; font-weight:700; font-size:13px; cursor:default;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s, background-color .3s;
+    position:relative; overflow:hidden;
+    opacity:0; transform:scale(0.85) translateY(10px);
+    animation: slotFadeIn 0.5s var(--ease) forwards;
+  }
+  @keyframes slotFadeIn{ to{ opacity:1; transform:scale(1) translateY(0); } }
 
-        .card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: var(--white);
-        }
+  .slot svg{ width:16px; height:16px; transition:transform .3s var(--ease); }
+  
+  .slot.available{ background:rgba(95,174,126,0.10); border-color:rgba(95,174,126,0.5); color:var(--available); cursor:pointer; }
+  .slot.available::after{
+    content:""; position:absolute; inset:-4px; border-radius:12px;
+    border:1px dashed var(--available); opacity:0;
+    animation: radarRipple 2.5s infinite;
+  }
+  @keyframes radarRipple{
+    0% { transform:scale(0.9); opacity:0.8; }
+    100% { transform:scale(1.15); opacity:0; }
+  }
+  .slot.available:hover{ transform:translateY(-6px) scale(1.05); box-shadow:0 10px 24px var(--available-glow); background:rgba(95,174,126,0.22); }
+  .slot.available:hover svg{ transform:scale(1.2); }
 
-        .card p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
+  .slot.reserved{ background:rgba(217,154,61,0.10); border-color:rgba(217,154,61,0.45); color:var(--reserved); }
+  .slot.occupied{ background:rgba(163,74,74,0.10); border-color:rgba(163,74,74,0.4); color:var(--occupied); opacity:0.75; }
+  
+  .slot.special{ background:rgba(176,135,214,0.10); border-color:rgba(176,135,214,0.5); color:var(--special); cursor:pointer; }
+  .slot.special.ev-slot{
+    box-shadow: inset 0 0 12px rgba(176,135,214,0.2);
+    animation: electricPulse 3s infinite alternate;
+  }
+  @keyframes electricPulse{
+    0% { border-color: rgba(176,135,214,0.3); }
+    100% { border-color: rgba(176,135,214,0.9); box-shadow: inset 0 0 15px rgba(176,135,214,0.4); }
+  }
+  .slot.special:hover{ transform:translateY(-6px) scale(1.05); box-shadow:0 10px 24px var(--special-glow); background:rgba(176,135,214,0.22); }
+  .slot.special:hover svg{ transform:scale(1.2); }
 
-        /* --- الفوتر والسوشيال ميديا (Footer) --- */
-        footer {
-            background: rgba(8, 8, 10, 0.85);
-            backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(212, 175, 55, 0.25);
-            padding: 35px 20px 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            z-index: 10;
-        }
+  /* Animated Car on Booking */
+  .slot.booking-animated::before{
+    content:"🚗"; position:absolute; font-size:18px;
+    top:50%; left:50%; transform:translate(-50%, -150%) scale(0.5);
+    opacity:0; animation: carPark 0.7s var(--ease) forwards;
+  }
+  @keyframes carPark{
+    0% { opacity:0; transform:translate(-50%, -180%) scale(0.5); }
+    50% { opacity:1; transform:translate(-50%, -50%) scale(1.2); }
+    100% { opacity:0; transform:translate(-50%, -50%) scale(1); }
+  }
 
-        .social-title {
-            font-size: 1.1rem;
-            color: var(--gold-light);
-            letter-spacing: 1px;
-        }
+  .slot .sub{ font-size:9.5px; font-weight:500; color:var(--muted-dim); font-family:'Tajawal',sans-serif; }
 
-        .social-links {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+  /* ---------- modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(5,5,5,0.78); backdrop-filter:blur(10px);
+    display:none; align-items:center; justify-content:center; z-index:100; padding:20px;
+  }
+  .modal-overlay.open{ display:flex; animation:fadeIn .3s var(--ease); }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+  .modal{
+    background:var(--charcoal); border:1px solid var(--hairline); border-radius:18px;
+    max-width:400px; width:100%; padding:30px; box-shadow:0 30px 80px rgba(0,0,0,0.7), 0 0 40px rgba(205,164,52,0.1);
+    animation:modalIn .4s var(--ease);
+    transform-origin: center center;
+  }
+  @keyframes modalIn{ from{ opacity:0; transform:translateY(30px) scale(.92);} to{ opacity:1; transform:none;} }
+  .modal h3{ font-size:19px; margin-bottom:4px; }
+  .modal .modal-sub{ color:var(--muted); font-size:13.5px; margin-bottom:22px; }
+  .modal .filter-field{ margin-bottom:12px; }
+  .modal-actions{ display:flex; gap:10px; margin-top:22px; }
+  .modal-actions .btn-gold{ flex:1; justify-content:center; }
+  .modal-actions .btn-ghost{ flex:1; text-align:center; }
 
-        .social-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            color: var(--white);
-            font-size: 1.3rem;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
+  .toast{
+    position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(120%);
+    background:linear-gradient(120deg, var(--gold-light), var(--gold));
+    color:var(--black); font-family:'Cairo',sans-serif; font-weight:700;
+    padding:14px 26px; border-radius:12px; box-shadow:0 12px 30px rgba(205,164,52,0.4);
+    z-index:200; transition:transform .4s var(--ease); font-size:14.5px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .toast.show{ transform:translateX(-50%) translateY(0); }
 
-        /* ألوان وهوفر السوشيال ميديا */
-        .social-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--gold-gradient);
-            opacity: 0;
-            transition: 0.3s;
-            z-index: -1;
-        }
+  /* ---------- features ---------- */
+  .features{ padding:100px 0; }
+  .feat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; perspective: 1000px; }
+  .feat-card{
+    background:var(--charcoal); border:1px solid var(--hairline); border-radius:16px; padding:30px 24px;
+    transition:transform .35s var(--ease), border-color .35s, box-shadow .35s;
+    position:relative; overflow:hidden;
+  }
+  .feat-card::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(205,164,52,0.12), transparent 70%);
+    opacity:0; transition:opacity .3s; pointer-events:none;
+  }
+  .feat-card:hover::before{ opacity:1; }
+  .feat-card:hover{
+    transform:translateY(-8px) scale(1.02);
+    border-color:rgba(205,164,52,0.5);
+    box-shadow:0 18px 35px rgba(0,0,0,0.4), 0 0 20px rgba(205,164,52,0.15);
+  }
+  .feat-icon{
+    width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(155deg, rgba(242,217,138,0.18), rgba(205,164,52,0.08));
+    margin-bottom:20px; color:var(--gold-light); transition:transform .3s var(--ease);
+  }
+  .feat-card:hover .feat-icon{ transform:scale(1.15) rotate(6deg); }
+  .feat-card h4{ font-size:16.5px; margin-bottom:10px; }
+  .feat-card p{ color:var(--muted); font-size:13.8px; line-height:1.8; }
 
-        .social-btn:hover {
-            color: #000;
-            border-color: #fff;
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
-        }
+  /* ---------- how it works ---------- */
+  .how{ padding:100px 0; }
+  .step-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; position:relative; }
+  .step-card{
+    background:var(--black-soft); border:1px solid var(--hairline); border-radius:16px; padding:34px 26px;
+    position:relative; overflow:hidden; transition:transform .35s var(--ease), border-color .35s;
+  }
+  .step-card:hover{ transform:translateY(-6px); border-color:rgba(205,164,52,0.45); }
+  .step-num{
+    font-family:'Cairo',sans-serif; font-weight:900; font-size:44px;
+    background:linear-gradient(160deg, var(--gold-light), transparent);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    -webkit-text-stroke:1px var(--gold-deep);
+    opacity:0.85; margin-bottom:14px; display:block;
+    transition:transform .3s var(--ease);
+  }
+  .step-card:hover .step-num{ transform:scale(1.1) translateX(-6px); }
+  .step-card h4{ font-size:16.5px; margin-bottom:10px; }
+  .step-card p{ color:var(--muted); font-size:13.8px; line-height:1.8; }
 
-        .social-btn:hover::before {
-            opacity: 1;
-        }
+  /* ---------- cta banner ---------- */
+  .cta-banner{
+    margin:40px auto 100px; max-width:1120px;
+    background:linear-gradient(135deg, rgba(205,164,52,0.14), rgba(23,21,19,0.6));
+    border:1px solid var(--hairline); border-radius:24px; padding:70px 40px;
+    text-align:center; position:relative; overflow:hidden;
+    transition: transform .35s var(--ease), box-shadow .35s;
+  }
+  .cta-banner:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px rgba(205,164,52,0.15);
+  }
+  .cta-banner::before{
+    content:""; position:absolute; width:400px; height:400px; border-radius:50%;
+    background:radial-gradient(circle, rgba(242,217,138,0.18), transparent 70%);
+    top:-150px; right:-100px; animation:orbFloat 18s ease-in-out infinite;
+  }
+  .cta-banner h2{ font-size:clamp(24px,3.6vw,36px); font-weight:800; margin-bottom:14px; position:relative; }
+  .cta-banner p{ color:var(--muted); max-width:520px; margin:0 auto 30px; font-size:15px; line-height:1.8; position:relative; }
 
-        .copyright {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-top: 10px;
-        }
+  /* ---------- footer ---------- */
+  footer{ border-top:1px solid var(--hairline); padding:50px 0 34px; }
+  .footer-top{ display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:30px; margin-bottom:34px; }
+  .footer-brand{ display:flex; align-items:center; gap:12px; }
+  .social-row{ display:flex; gap:12px; }
+  .social-btn{
+    width:42px; height:42px; border-radius:11px; border:1px solid var(--hairline);
+    display:flex; align-items:center; justify-content:center; color:var(--muted);
+    transition:all .3s var(--ease); text-decoration:none;
+  }
+  .social-btn svg{ width:19px; height:19px; }
+  .social-btn:hover{ color:var(--black); background:var(--gold); border-color:var(--gold); transform:translateY(-3px) scale(1.08); box-shadow:0 8px 20px rgba(205,164,52,0.35); }
+  .footer-bottom{ border-top:1px solid var(--hairline); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; color:var(--muted-dim); font-size:12.5px; }
+  .footer-bottom b{ color:var(--muted); font-weight:600; }
 
-        .copyright span {
-            color: var(--gold-main);
-        }
+  [data-reveal]{ opacity:0; transform:translateY(26px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+  [data-reveal].in{ opacity:1; transform:none; }
 
-        /* --- الحركات (Animations) --- */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* تجاوب الشاشات الصغيرة (Responsive) */
-        @media (max-width: 768px) {
-            .hero-title { font-size: 2.3rem; }
-            .hero-desc { font-size: 1rem; }
-            .card { width: 100%; max-width: 320px; }
-        }
-    </style>
+  @media (max-width:900px){
+    .nav-links{ display:none; }
+    .filter-bar{ grid-template-columns:1fr; }
+    .metric-grid{ grid-template-columns:1fr 1fr; }
+    .feat-grid{ grid-template-columns:1fr 1fr; }
+    .step-row{ grid-template-columns:1fr; }
+    .slot-grid{ grid-template-columns:repeat(4,1fr); }
+  }
+  @media (max-width:520px){
+    .metric-grid, .feat-grid{ grid-template-columns:1fr; }
+    .slot-grid{ grid-template-columns:repeat(3,1fr); }
+    .footer-top{ flex-direction:column; }
+  }
+</style>
 </head>
 <body>
 
-    <!-- الخلفية التفاعلية المتحركة -->
-    <div class="bg-container">
-        <div class="bg-image"></div>
+<div class="bg-scene">
+  <div class="beam b1"></div>
+  <div class="beam b2"></div>
+  <div class="beam b3"></div>
+  <div class="beam b4"></div>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-badge">د</div>
+      <div class="brand-text">
+        <div class="ar">دوَّر</div>
+        <div class="en">DAWWAR</div>
+      </div>
     </div>
-    <div class="bg-overlay"></div>
+    <nav class="nav-links">
+      <a href="#parking">أماكن الركن</a>
+      <a href="#features">المميزات</a>
+      <a href="#how">إزاي تستخدمه؟</a>
+    </nav>
+    <button class="btn-gold" onclick="document.getElementById('parking').scrollIntoView({behavior:'smooth'})">
+      دوَّرلي على ركنة
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+</header>
 
-    <!-- الهيدر -->
-    <header>
-        <div class="logo">
-            <i class="fa-solid fa-square-parking"></i>
-            <span>Dawaar Parking</span>
-        </div>
-    </header>
+<!-- HERO -->
+<section class="hero wrap">
+  <div class="eyebrow">DAWWAR SMART PARKING</div>
+  <h1>بدل ما تفضل تدوَّر.. <span class="grad-text">ركنتك جاهزة قبل ما توصل</span></h1>
+  <p class="lead">شوف الأماكن المتاحة في المولات قبل ما توصل، اختار مكانك واحجزه للمدة اللي محتاجها، ولاقي أماكن ذوي الاحتياجات الخاصة وشواحن الكهرباء بسهولة.</p>
 
-    <!-- المحتوى -->
-    <main>
-        <h1 class="hero-title">مرحباً بكم في <span>دوار باركينج</span></h1>
-        <p class="hero-desc">حلول ذكية، أمان متكامل، وتجربة ركن فاخرة لسيارتك بأعلى معايير الراحة والتكنولوجيا الحديثة.</p>
+  <div class="filter-bar" data-reveal>
+    <div class="filter-field">
+      <label>المول</label>
+      <select id="mallSelect">
+        <option>Mall of Egypt</option>
+        <option>City Centre</option>
+        <option>Downtown Mall</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label>وقت الوصول</label>
+      <select id="arrivalSelect">
+        <option>بعد 15 دقيقة</option>
+        <option selected>بعد 30 دقيقة</option>
+        <option>بعد 45 دقيقة</option>
+        <option>بعد ساعة</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label>مدة الركن</label>
+      <select id="durationSelect">
+        <option>ساعة</option>
+        <option selected>ساعتين</option>
+        <option>3 ساعات</option>
+        <option>4 ساعات</option>
+      </select>
+    </div>
+    <button class="btn-gold" onclick="document.getElementById('parking').scrollIntoView({behavior:'smooth'})">دوَّرلي</button>
+  </div>
+</section>
 
-        <!-- كروت مميزات -->
-        <div class="cards-container">
-            <div class="card">
-                <i class="fa-solid fa-shield-halved"></i>
-                <h3>أمان متكامل 24/7</h3>
-                <p>حراسة مشددة وكاميرات مراقبة متطورة لحماية سيارتك على مدار الساعة.</p>
-            </div>
-            <div class="card">
-                <i class="fa-solid fa-bolt"></i>
-                <h3>دخول وخروج ذكي</h3>
-                <p>أنظمة إلكترونية سريعة لتسهيل الحركة دون أي انتظار أو تعقيد.</p>
-            </div>
-            <div class="card">
-                <i class="fa-solid fa-crown"></i>
-                <h3>خدمة VIP</h3>
-                <p>مساحات مخصصة واعتناء خاص لضمان أفضل تجربة لك ولسيارتك.</p>
-            </div>
-        </div>
-    </main>
+<!-- DASHBOARD -->
+<section class="dashboard wrap">
+  <div class="metric-grid">
+    <div class="metric-card" data-reveal>
+      <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>
+      <div class="metric-num" data-count="0" id="countAvailable">0</div>
+      <div class="metric-label">أماكن متاحة للحجز دلوقتي</div>
+    </div>
+    <div class="metric-card" data-reveal>
+      <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      <div class="metric-num" data-count="0" id="countHandicap">0</div>
+      <div class="metric-label">أماكن متاحة لذوي الاحتياجات الخاصة</div>
+    </div>
+    <div class="metric-card" data-reveal>
+      <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+      <div class="metric-num" data-count="0" id="countEV">0</div>
+      <div class="metric-label">أماكن متاحة بشاحن كهربائي</div>
+    </div>
+    <div class="metric-card" data-reveal>
+      <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg>
+      <div class="metric-num">30m</div>
+      <div class="metric-label">احجز قبل وصولك بوقت</div>
+    </div>
+  </div>
+</section>
 
-    <!-- الفوتر مع اللينكات -->
-    <footer>
-        <div class="social-title">تواصل معنا عبر منصاتنا الرسمية</div>
-        
-        <div class="social-links">
-            <!-- يوتيوب -->
-            <a href="https://www.youtube.com/@DawaarParking" target="_blank" class="social-btn" title="YouTube">
-                <i class="fa-brands fa-youtube"></i>
-            </a>
+<!-- LIVE PARKING -->
+<section class="parking wrap" id="parking">
+  <div class="sec-head" data-reveal>
+    <div class="eyebrow">LIVE PARKING</div>
+    <h2>شوف المكان. اختاره. واحجزه.</h2>
+  </div>
 
-            <!-- فيسبوك -->
-            <a href="https://www.facebook.com/DawaarParking/" target="_blank" class="social-btn" title="Facebook">
-                <i class="fa-brands fa-facebook-f"></i>
-            </a>
+  <div class="legend" data-reveal>
+    <div class="legend-chip"><span class="legend-dot dot-available"></span> متاح</div>
+    <div class="legend-chip"><span class="legend-dot dot-reserved"></span> محجوز</div>
+    <div class="legend-chip"><span class="legend-dot dot-occupied"></span> مشغول</div>
+    <div class="legend-chip"><span class="legend-dot dot-special"></span> أماكن خاصة</div>
+  </div>
 
-            <!-- انستجرام -->
-            <a href="https://www.instagram.com/dawaarparking/" target="_blank" class="social-btn" title="Instagram">
-                <i class="fa-brands fa-instagram"></i>
-            </a>
+  <div data-reveal class="parking-container-3d" id="parkingContainer3d">
+    <div class="floor-bar">
+      <div class="floor-title">Level B1 — Zone A <span>· Mall of Egypt</span></div>
+      <div class="live-badge"><span class="live-dot"></span> Live availability · DAWWAR</div>
+    </div>
+    <div class="grid-panel">
+      <div class="slot-grid" id="slotGrid"></div>
+    </div>
+  </div>
+</section>
 
-            <!-- ثريدز -->
-            <a href="https://www.threads.com/@dawaarparking?xmt=AQG0gzPF6x0ZJ50lf2lsxE7zrUbfP-Whq-fYhpKV3B-71Xo" target="_blank" class="social-btn" title="Threads">
-                <i class="fa-brands fa-threads"></i>
-            </a>
+<!-- FEATURES -->
+<section class="features wrap" id="features">
+  <div class="sec-head" data-reveal>
+    <div class="eyebrow">WHY DAWWAR?</div>
+    <h2>مش مجرد باركينج.. دي طريقة أذكى للركن.</h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card" data-reveal>
+      <div class="feat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 3.5"/></svg></div>
+      <h4>احجز قبل ما توصل</h4>
+      <p>اختار مكانك واحجزه من نص ساعة قبل ما توصل المول، وتضمن مكانك جاهز.</p>
+    </div>
+    <div class="feat-card" data-reveal>
+      <div class="feat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <h4>أماكن ذوي الاحتياجات</h4>
+      <p>أماكن مخصصة وواضحة لذوي الاحتياجات الخاصة، معروضة بشكل مباشر في الخريطة.</p>
+    </div>
+    <div class="feat-card" data-reveal>
+      <div class="feat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+      <h4>شواحن كهربائية</h4>
+      <p>شوف بوضوح الأماكن المجهزة بشواحن للعربيات الكهربائية قبل ما تختار.</p>
+    </div>
+    <div class="feat-card" data-reveal>
+      <div class="feat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+      <h4>تحديث لحظي</h4>
+      <p>حالة كل مكان بتتحدث لحظياً، فمفيش حجز مزدوج ولا مفاجآت لما توصل.</p>
+    </div>
+  </div>
+</section>
 
-            <!-- إكس (تويتر سابقاً) -->
-            <a href="https://x.com/DawaarParking" target="_blank" class="social-btn" title="X (Twitter)">
-                <i class="fa-brands fa-x-twitter"></i>
-            </a>
-        </div>
+<!-- HOW IT WORKS -->
+<section class="how wrap" id="how">
+  <div class="sec-head" data-reveal>
+    <div class="eyebrow">HOW IT WORKS</div>
+    <h2>3 خطوات وركنتك مستنياك.</h2>
+  </div>
+  <div class="step-row">
+    <div class="step-card" data-reveal>
+      <span class="step-num">01</span>
+      <h4>حدد وقت وصولك</h4>
+      <p>اختار المول، وقت وصولك المتوقع، والمدة اللي محتاج تركن فيها.</p>
+    </div>
+    <div class="step-card" data-reveal>
+      <span class="step-num">02</span>
+      <h4>شوف الأماكن المتاحة</h4>
+      <p>هتشوف الأماكن العادية، أماكن ذوي الاحتياجات، ومحطات الشحن الكهربائي.</p>
+    </div>
+    <div class="step-card" data-reveal>
+      <span class="step-num">03</span>
+      <h4>أكد الحجز</h4>
+      <p>دوس تأكيد وهتلاقي حالة المكان بتتغير لمحجوز على طول باسمك.</p>
+    </div>
+  </div>
+</section>
 
-        <div class="copyright">
-            جميع الحقوق محفوظة &copy; 2025 لـ <span>Dawaar Parking</span>
-        </div>
-    </footer>
+<!-- FINAL CTA -->
+<section class="wrap">
+  <div class="cta-banner" data-reveal>
+    <h2>بلاش تلف وتدوَّر.. خلّي دوَّر يدورلك.</h2>
+    <p>احجز مكانك قبل ما تدخل الجراچ بلحظات، ووفر وقتك ووقودك من غير ما تلف بين الأدوار.</p>
+    <button class="btn-gold" onclick="document.getElementById('parking').scrollIntoView({behavior:'smooth'})">
+      دوَّرلي على ركنة
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+    </button>
+  </div>
+</section>
 
+<!-- FOOTER -->
+<footer class="wrap">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="brand-badge">د</div>
+      <div class="brand-text">
+        <div class="ar">دوَّر</div>
+        <div class="en">DAWWAR</div>
+      </div>
+    </div>
+    <div class="social-row">
+      <a class="social-btn" href="https://www.youtube.com/@DawaarParking" target="_blank" rel="noopener" aria-label="يوتيوب">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.5V8.5l6.3 3.5-6.3 3.5Z"/></svg>
+      </a>
+      <a class="social-btn" href="https://www.facebook.com/DawaarParking/" target="_blank" rel="noopener" aria-label="فيسبوك">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg>
+      </a>
+      <a class="social-btn" href="https://www.instagram.com/dawaarparking/" target="_blank" rel="noopener" aria-label="انستجرام">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg>
+      </a>
+      <a class="social-btn" href="https://www.threads.com/@dawaarparking" target="_blank" rel="noopener" aria-label="ثريدز">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3c-4.5 0-7.5 2.8-7.5 8.9 0 6.2 3.3 9.1 8 9.1 3.5 0 5.7-1.6 5.7-4 0-2.1-1.7-3-3.5-3.3-1.8-.3-3.1.2-3.1 1.3 0 .8.8 1.2 1.6 1.2M9 9.5c.4-1 1.4-1.7 2.9-1.7 2.4 0 3.6 1.6 3.6 4.4"/></svg>
+      </a>
+      <a class="social-btn" href="https://x.com/DawaarParking" target="_blank" rel="noopener" aria-label="اكس">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22H16.9l-5-6.5-5.7 6.5H3l8.1-9.3L2.7 2h6.5l4.5 6 5.2-6Zm-1.1 18h1.7L7.3 3.9H5.5L17.8 20Z"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>Smart Parking Concept · Course Prototype · © 2026</div>
+    <div>Developed by <b>Salma Ahmed</b></div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">Spot A01</h3>
+    <p class="modal-sub" id="modalSub">ركنة عادية</p>
+    <div class="filter-field">
+      <label>وقت الوصول</label>
+      <select id="modalArrival">
+        <option>بعد 15 دقيقة</option>
+        <option selected>بعد 30 دقيقة</option>
+        <option>بعد 45 دقيقة</option>
+        <option>بعد ساعة</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label>مدة الحجز</label>
+      <select id="modalDuration">
+        <option>ساعة</option>
+        <option selected>ساعتين</option>
+        <option>3 ساعات</option>
+        <option>4 ساعات</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal()">إلغاء</button>
+      <button class="btn-gold" onclick="confirmBooking()">تأكيد الحجز</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg>
+  <span>تم حجز الركنة بنجاح</span>
+</div>
+
+<script>
+  // ---------- generate parking grid ----------
+  const rows = ['A','B','C'];
+  let slots = [];
+  let idx = 0;
+  const specialSlots = { 3:'ev', 12:'ev', 20:'handicap' };
+  for(let r=0; r<rows.length; r++){
+    for(let c=1; c<=8; c++){
+      let id = rows[r] + String(c).padStart(2,'0');
+      let type = 'normal', state;
+      if(specialSlots[idx] === 'ev'){ type='ev'; state='special'; }
+      else if(specialSlots[idx] === 'handicap'){ type='handicap'; state='special'; }
+      else {
+        const rand = Math.random();
+        state = rand < 0.45 ? 'available' : rand < 0.75 ? 'occupied' : 'reserved';
+      }
+      slots.push({ id, type, state });
+      idx++;
+    }
+  }
+
+  const grid = document.getElementById('slotGrid');
+  function iconFor(type){
+    if(type === 'ev') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>';
+    if(type === 'handicap') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>';
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>';
+  }
+  function subLabel(s){
+    if(s.type === 'ev') return 'EV';
+    if(s.type === 'handicap') return 'ذوي الهمم';
+    return s.state === 'available' ? 'متاح' : s.state === 'reserved' ? 'محجوز' : 'مشغول';
+  }
+
+  function renderGrid(){
+    grid.innerHTML = '';
+    slots.forEach((s, i)=>{
+      const div = document.createElement('div');
+      const extraClass = s.type === 'ev' ? ' ev-slot' : '';
+      div.className = 'slot ' + s.state + extraClass;
+      div.style.animationDelay = (i * 0.025) + 's';
+      div.innerHTML = iconFor(s.type) + `<span>${s.id}</span><span class="sub">${subLabel(s)}</span>`;
+      if(s.state === 'available' || s.state === 'special'){
+        div.addEventListener('click', ()=> openModal(s.id));
+      }
+      grid.appendChild(div);
+    });
+  }
+  renderGrid();
+
+  // ---------- counters ----------
+  function updateCounters(){
+    const available = slots.filter(s=> s.state==='available').length;
+    const handicap = slots.filter(s=> s.type==='handicap' && s.state==='special').length;
+    const ev = slots.filter(s=> s.type==='ev' && s.state==='special').length;
+    animateCount('countAvailable', available);
+    animateCount('countHandicap', handicap);
+    animateCount('countEV', ev);
+  }
+  function animateCount(elId, target){
+    const el = document.getElementById(elId);
+    const start = parseInt(el.textContent) || 0;
+    const duration = 700;
+    const startTime = performance.now();
+    function tick(now){
+      const p = Math.min((now-startTime)/duration, 1);
+      const eased = 1 - Math.pow(1-p, 3);
+      el.textContent = Math.round(start + (target-start)*eased);
+      if(p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // ---------- modal / booking ----------
+  let activeSlotId = null;
+  function openModal(slotId){
+    activeSlotId = slotId;
+    const s = slots.find(x=>x.id===slotId);
+    document.getElementById('modalTitle').textContent = 'Spot ' + slotId;
+    document.getElementById('modalSub').textContent = s.type==='ev' ? 'ركنة بشاحن كهربائي' : s.type==='handicap' ? 'ركنة ذوي الاحتياجات الخاصة' : 'ركنة عادية';
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function closeModal(){
+    document.getElementById('modalOverlay').classList.remove('open');
+    activeSlotId = null;
+  }
+  function confirmBooking(){
+    if(!activeSlotId) return;
+    const s = slots.find(x=>x.id===activeSlotId);
+    
+    // Trigger animated parking
+    const slotElements = grid.querySelectorAll('.slot');
+    const targetEl = Array.from(slotElements).find(el => el.querySelector('span').textContent === activeSlotId);
+    if(targetEl){
+      targetEl.classList.add('booking-animated');
+    }
+
+    setTimeout(()=>{
+      s.state = s.type === 'normal' ? 'reserved' : 'occupied';
+      renderGrid();
+      updateCounters();
+      closeModal();
+      showToast();
+    }, 450);
+  }
+  function showToast(){
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(()=> t.classList.remove('show'), 2600);
+  }
+  document.getElementById('modalOverlay').addEventListener('click', e=>{
+    if(e.target.id === 'modalOverlay') closeModal();
+  });
+
+  updateCounters();
+
+  // ---------- 3D Mouse Parallax on Parking Grid ----------
+  const parkingContainer = document.getElementById('parkingContainer3d');
+  if(parkingContainer && window.matchMedia('(pointer:fine)').matches){
+    parkingContainer.addEventListener('mousemove', (e)=>{
+      const rect = parkingContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      const rotateX = -(y / rect.height) * 14;
+      const rotateY = (x / rect.width) * 14;
+      parkingContainer.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    parkingContainer.addEventListener('mouseleave', ()=>{
+      parkingContainer.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+    });
+  }
+
+  // ---------- Mouse Spotlight Effect on Cards ----------
+  const cards = document.querySelectorAll('.metric-card, .feat-card');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / card.clientWidth) * 100;
+      const y = ((e.clientY - rect.top) / card.clientHeight) * 100;
+      card.style.setProperty('--mouse-x', `${x}%`);
+      card.style.setProperty('--mouse-y', `${y}%`);
+    });
+  });
+
+  // ---------- scroll reveal ----------
+  const revealEls = document.querySelectorAll('[data-reveal]');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el=> io.observe(el));
+</script>
 </body>
 </html>
+
+```
