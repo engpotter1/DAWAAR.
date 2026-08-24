@@ -61,7 +61,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.8s var(--ease), visibility 0.8s var(--ease);
+    transition: opacity 1.2s var(--ease), visibility 1.2s var(--ease);
   }
   .splash-screen.fade-out {
     opacity: 0;
@@ -74,22 +74,22 @@
     max-width: 90%;
   }
   .splash-logo {
-    width: 65px;
-    height: 65px;
-    border-radius: 18px;
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
     background: linear-gradient(155deg, var(--gold-light), var(--gold) 55%, var(--gold-deep));
     color: var(--black);
     font-family: 'Cairo', sans-serif;
     font-weight: 900;
-    font-size: 32px;
+    font-size: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 24px;
-    box-shadow: 0 0 35px rgba(205,164,52,0.6);
+    margin: 0 auto 28px;
+    box-shadow: 0 0 45px rgba(205,164,52,0.7);
     opacity: 0;
     transform: scale(0.3) rotate(-15deg);
-    animation: splashAppear 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
+    animation: splashAppear 1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.3s;
   }
   .splash-title {
     font-size: clamp(28px, 6vw, 54px);
@@ -102,17 +102,17 @@
     opacity: 0;
     filter: blur(12px);
     transform: scale(0.85) translateY(20px);
-    animation: splashTextIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s;
+    animation: splashTextIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s;
     text-shadow: 0 0 40px rgba(205,164,52,0.3);
   }
   .splash-sub {
     color: var(--muted);
     font-size: clamp(14px, 2.5vw, 18px);
-    margin-top: 14px;
+    margin-top: 16px;
     opacity: 0;
     transform: translateY(10px);
-    animation: splashSubIn 0.8s var(--ease) forwards 0.8s;
-    letter-spacing: 1px;
+    animation: splashSubIn 1s var(--ease) forwards 1s;
+    letter-spacing: 2px;
   }
   @keyframes splashAppear {
     to { opacity: 1; transform: scale(1) rotate(0deg); }
@@ -275,7 +275,7 @@
   .mobile-toggle{ display:none; background:none; border:1px solid var(--hairline); color:var(--white); width:40px; height:40px; border-radius:8px; }
 
   /* ---------- hero ---------- */
-  .hero{ padding:96px 0 70px; text-align:center; }
+  .hero{ padding:96px 0 70px; text-align:center; position:relative; z-index:30; }
   .hero .eyebrow{ margin-bottom:26px; }
   .hero h1{
     font-size:clamp(30px,5.2vw,58px); font-weight:900; line-height:1.28;
@@ -292,10 +292,10 @@
   /* ---------- LUXURY CUSTOM FILTER BAR & DROPDOWNS ---------- */
   .filter-bar{
     max-width:940px; margin:0 auto; display:grid; grid-template-columns:1.2fr 1fr 1fr auto;
-    gap:12px; background:rgba(22, 21, 19, 0.75); backdrop-filter:blur(20px);
+    gap:14px; background:rgba(22, 21, 19, 0.85); backdrop-filter:blur(20px);
     border:1px solid var(--hairline); padding:14px; border-radius:20px;
     box-shadow:0 25px 60px rgba(0,0,0,0.5), 0 0 30px rgba(205,164,52,0.05);
-    position:relative; z-index:40;
+    position:relative; z-index:50;
   }
 
   .custom-dropdown{
@@ -305,24 +305,43 @@
 
   .custom-dropdown-header{
     background:var(--black-soft);
-    border:1px solid rgba(205,164,52,0.12);
+    border:1px solid rgba(205,164,52,0.14);
     border-radius:14px;
-    padding:8px 14px;
+    padding:10px 14px;
     display:flex;
     align-items:center;
     justify-content:space-between;
+    gap:12px;
     cursor:pointer;
     transition:all .3s var(--ease);
   }
   .custom-dropdown-header:hover, .custom-dropdown.active .custom-dropdown-header{
     border-color:var(--gold);
-    background:rgba(31, 29, 25, 0.9);
+    background:rgba(31, 29, 25, 0.95);
     box-shadow:0 0 15px rgba(205,164,52,0.15);
     transform:translateY(-2px);
   }
 
-  .custom-dropdown-info{
+  .custom-dropdown-main{
+    display:flex;
+    align-items:center;
+    gap:10px;
     text-align:right;
+  }
+
+  .custom-dropdown-icon{
+    width:22px;
+    height:22px;
+    color:var(--gold);
+    flex-shrink:0;
+    transition:transform .3s var(--ease);
+  }
+  .custom-dropdown.active .custom-dropdown-icon{
+    transform:scale(1.12);
+    filter:drop-shadow(0 0 6px var(--gold));
+  }
+
+  .custom-dropdown-info{
     display:flex;
     flex-direction:column;
     gap:2px;
@@ -334,29 +353,22 @@
     font-weight:600;
   }
   .custom-dropdown-info .selected-val{
-    font-size:14.5px;
+    font-size:14px;
     font-weight:700;
     color:var(--white);
     font-family:'Cairo',sans-serif;
+    white-space:nowrap;
   }
 
-  .custom-dropdown-icon-box{
+  .chevron-box{
     display:flex;
     align-items:center;
-    gap:8px;
-    color:var(--gold);
+    justify-content:center;
+    flex-shrink:0;
   }
-  .custom-dropdown-icon-box .field-icon{
-    width:20px; height:20px;
-    opacity:0.85;
-    transition:transform .3s var(--ease);
-  }
-  .custom-dropdown.active .field-icon{
-    transform:scale(1.15);
-    filter:drop-shadow(0 0 8px var(--gold));
-  }
-  .custom-dropdown-icon-box .chevron-icon{
-    width:16px; height:16px;
+  .chevron-icon{
+    width:15px;
+    height:15px;
     color:var(--muted);
     transition:transform .35s var(--ease), color .3s;
   }
@@ -367,20 +379,20 @@
 
   .custom-dropdown-list{
     position:absolute;
-    top:calc(100% + 8px);
+    top:calc(100% + 10px);
     left:0; right:0;
-    background:rgba(18, 17, 15, 0.95);
-    backdrop-filter:blur(22px);
-    border:1px solid rgba(205,164,52,0.3);
+    background:rgba(18, 17, 15, 0.98);
+    backdrop-filter:blur(24px);
+    border:1px solid rgba(205,164,52,0.35);
     border-radius:14px;
     padding:8px;
-    box-shadow:0 18px 45px rgba(0,0,0,0.8), 0 0 25px rgba(205,164,52,0.12);
+    box-shadow:0 20px 50px rgba(0,0,0,0.9), 0 0 25px rgba(205,164,52,0.15);
     display:none;
     flex-direction:column;
     gap:4px;
-    z-index:100;
+    z-index:999;
     opacity:0;
-    transform:translateY(-10px) scale(0.96);
+    transform:translateY(-8px) scale(0.97);
     transition:all .25s var(--ease);
   }
   .custom-dropdown.active .custom-dropdown-list{
@@ -393,7 +405,7 @@
     padding:10px 14px;
     border-radius:10px;
     color:var(--muted);
-    font-size:14px;
+    font-size:13.5px;
     font-weight:600;
     font-family:'Cairo',sans-serif;
     cursor:pointer;
@@ -403,12 +415,12 @@
     transition:all .2s var(--ease);
   }
   .custom-dropdown-item:hover{
-    background:rgba(205,164,52,0.12);
+    background:rgba(205,164,52,0.14);
     color:var(--gold-light);
     transform:translateX(-4px);
   }
   .custom-dropdown-item.selected{
-    background:linear-gradient(90deg, rgba(205,164,52,0.22), transparent);
+    background:linear-gradient(90deg, rgba(205,164,52,0.25), transparent);
     color:var(--gold-light);
     border-right:3px solid var(--gold);
   }
@@ -416,7 +428,7 @@
   .filter-bar .btn-gold{ padding:0 26px; white-space:nowrap; justify-content: center; height:100%; border-radius:14px; }
 
   /* ---------- dashboard ---------- */
-  .dashboard{ padding:70px 0 30px; }
+  .dashboard{ padding:70px 0 30px; position:relative; z-index:10; }
   .metric-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; perspective:1000px; }
   .metric-card{
     background:linear-gradient(160deg, var(--charcoal), var(--charcoal-2));
@@ -446,7 +458,7 @@
   .sec-head h2{ font-size:clamp(24px,3.4vw,38px); font-weight:800; margin-top:16px; line-height:1.4; }
 
   /* ---------- parking ---------- */
-  .parking{ padding:100px 0; perspective: 1400px; }
+  .parking{ padding:100px 0; perspective: 1400px; position:relative; z-index:10; }
   .legend{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-bottom:36px; }
   .legend-chip{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); background:var(--charcoal); border:1px solid var(--hairline); padding:8px 14px; border-radius:999px; transition:transform .25s, border-color .25s; }
   .legend-chip:hover{ transform:translateY(-2px); border-color:var(--gold); }
@@ -536,7 +548,7 @@
   /* ---------- modal ---------- */
   .modal-overlay{
     position:fixed; inset:0; background:rgba(5,5,5,0.78); backdrop-filter:blur(10px);
-    display:none; align-items:center; justify-content:center; z-index:100; padding:20px;
+    display:none; align-items:center; justify-content:center; z-index:1000; padding:20px;
   }
   .modal-overlay.open{ display:flex; animation:fadeIn .3s var(--ease); }
   @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
@@ -562,7 +574,7 @@
     background:linear-gradient(120deg, var(--gold-light), var(--gold));
     color:var(--black); font-family:'Cairo',sans-serif; font-weight:700;
     padding:14px 26px; border-radius:12px; box-shadow:0 12px 30px rgba(205,164,52,0.4);
-    z-index:200; transition:transform .4s var(--ease); font-size:14.5px;
+    z-index:2000; transition:transform .4s var(--ease); font-size:14.5px;
     display:flex; align-items:center; gap:8px;
   }
   .toast.show{ transform:translateX(-50%) translateY(0); }
@@ -682,7 +694,7 @@
 <div class="splash-screen" id="splashScreen">
   <div class="splash-content">
     <div class="splash-logo">د</div>
-    <h1 class="splash-title">🥰طريقك أسهل مع دوَّر...اهلا بك</h1>
+    <h1 class="splash-title">ركنتك مستنياك.. أهلاً بك في دوَّر</h1>
     <p class="splash-sub">SMART PARKING EXPERIENCE</p>
   </div>
 </div>
@@ -731,13 +743,15 @@
     <!-- Field 1: Mall -->
     <div class="custom-dropdown" id="dropdownMall">
       <div class="custom-dropdown-header" onclick="toggleDropdown('dropdownMall')">
-        <div class="custom-dropdown-info">
-          <span class="field-label">المول</span>
-          <span class="selected-val" id="valMall">Mall of Egypt</span>
+        <div class="custom-dropdown-main">
+          <svg class="custom-dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg>
+          <div class="custom-dropdown-info">
+            <span class="field-label">المول</span>
+            <span class="selected-val" id="valMall">Mall of Egypt</span>
+          </div>
         </div>
-        <div class="custom-dropdown-icon-box">
-          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg>
-          <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="chevron-box">
+          <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
       </div>
       <div class="custom-dropdown-list">
@@ -750,13 +764,15 @@
     <!-- Field 2: Arrival Time -->
     <div class="custom-dropdown" id="dropdownArrival">
       <div class="custom-dropdown-header" onclick="toggleDropdown('dropdownArrival')">
-        <div class="custom-dropdown-info">
-          <span class="field-label">وقت الوصول</span>
-          <span class="selected-val" id="valArrival">بعد 30 دقيقة</span>
+        <div class="custom-dropdown-main">
+          <svg class="custom-dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <div class="custom-dropdown-info">
+            <span class="field-label">وقت الوصول</span>
+            <span class="selected-val" id="valArrival">بعد 30 دقيقة</span>
+          </div>
         </div>
-        <div class="custom-dropdown-icon-box">
-          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="chevron-box">
+          <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
       </div>
       <div class="custom-dropdown-list">
@@ -770,13 +786,15 @@
     <!-- Field 3: Duration -->
     <div class="custom-dropdown" id="dropdownDuration">
       <div class="custom-dropdown-header" onclick="toggleDropdown('dropdownDuration')">
-        <div class="custom-dropdown-info">
-          <span class="field-label">مدة الركن</span>
-          <span class="selected-val" id="valDuration">ساعتين</span>
+        <div class="custom-dropdown-main">
+          <svg class="custom-dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg>
+          <div class="custom-dropdown-info">
+            <span class="field-label">مدة الركن</span>
+            <span class="selected-val" id="valDuration">ساعتين</span>
+          </div>
         </div>
-        <div class="custom-dropdown-icon-box">
-          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg>
-          <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="chevron-box">
+          <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
       </div>
       <div class="custom-dropdown-list">
@@ -921,7 +939,7 @@
     </div>
     <div class="social-row">
       <a class="social-btn" href="https://www.youtube.com/@DawaarParking" target="_blank" rel="noopener" aria-label="يوتيوب">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.5V8.5l6.3 3.5-6.3 3.5Z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.5V8.5l6.3 3.5-6.3 3.5Z"/></svg>
       </a>
       <a class="social-btn" href="https://www.facebook.com/DawaarParking/" target="_blank" rel="noopener" aria-label="فيسبوك">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg>
@@ -1008,14 +1026,14 @@
     }
   });
 
-  // ---------- SPLASH SCREEN TIMEOUT ----------
+  // ---------- SPLASH SCREEN TIMEOUT (3.8 SECONDS) ----------
   window.addEventListener('load', () => {
     setTimeout(() => {
       const splash = document.getElementById('splashScreen');
       if(splash){
         splash.classList.add('fade-out');
       }
-    }, 2200);
+    }, 3800);
   });
 
   // ---------- LIGHT TRAIL WITH MOUSE ----------
