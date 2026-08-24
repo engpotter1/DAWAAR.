@@ -142,11 +142,10 @@
     margin-top: 15px;
   }
   .splash-main-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: clamp(34px, 4.8vw, 56px);
+    font-family: 'Cairo', sans-serif;
+    font-size: clamp(38px, 5.2vw, 62px);
     font-weight: 900;
-    letter-spacing: 14px;
-    margin-right: -14px;
+    letter-spacing: 4px;
     color: #e2e8f0;
     background: linear-gradient(180deg, #ffffff 15%, #c8cdd4 55%, #7e848d 100%);
     -webkit-background-clip: text;
@@ -276,7 +275,7 @@
     width:44px; height:44px; border-radius:12px;
     display:flex; align-items:center; justify-content:center;
     background:linear-gradient(155deg, var(--gold-light), var(--gold) 55%, var(--gold-deep));
-    color:var(--black); font-family:'Cairo',sans-serif; font-weight:900; font-size:20px;
+    color:var(--black); font-family:'Cairo',sans-serif; font-weight:900; font-size:22px;
     box-shadow:0 4px 18px rgba(205,164,52,0.35);
     transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
   }
@@ -333,8 +332,6 @@
     cursor:pointer;
   }
   .btn-danger:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(163,74,74,0.5); }
-
-  .mobile-toggle{ display:none; background:none; border:1px solid var(--hairline); color:var(--white); width:40px; height:40px; border-radius:8px; }
 
   /* ---------- hero ---------- */
   .hero{ padding:96px 0 70px; text-align:center; position:relative; z-index:30; }
@@ -901,7 +898,7 @@
       <path d="M0 480 C 140 360 240 220 190 80 C 160 20 80 -40 -20 -60 Z" stroke="#fff0bd" stroke-width="1.5" fill="none" opacity="0.6"/>
     </svg>
 
-    <!-- Center Emblem & Official Typography -->
+    <!-- Center Emblem with Arabic Letter 'د' & Smart Parking Styling -->
     <div class="splash-center-content">
       <svg class="main-logo-svg" viewBox="0 0 320 220" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -924,28 +921,28 @@
           </linearGradient>
         </defs>
 
-        <!-- 3D Outer D Arch (Silver Chrome with Deep Bevel) -->
+        <!-- Outer Dynamic Arch / Radar Track -->
         <path d="M 125 24 C 205 24 256 68 256 122 C 256 176 200 204 135 204 C 180 188 218 160 218 122 C 218 80 178 50 125 50 Z" fill="url(#metalSilver)" />
         
-        <!-- 3D Inner Left D Pillar (Solid Gold Metallic) -->
-        <path d="M 90 24 L 140 24 L 98 175 C 95 188 80 198 64 198 C 76 178 90 105 90 24 Z" fill="url(#metalGold)" />
+        <!-- Luxury Arabic Dal 'د' Geometry Integrated with Parking Element -->
+        <path d="M 200 48 C 175 48 125 58 100 102 C 82 135 78 170 120 186 C 160 200 210 195 240 185 L 230 162 C 200 172 155 174 125 162 C 105 152 108 132 120 114 C 138 88 170 76 205 76 Z" fill="url(#metalGold)" />
         
         <!-- Curved Roadway Ribbons in Base -->
         <path d="M 60 205 C 115 162 205 162 260 205 C 205 174 115 174 60 205 Z" fill="url(#roadSweep)" />
         <path d="M 80 214 C 125 185 195 185 240 214 C 195 194 125 194 80 214 Z" fill="url(#metalGold)" opacity="0.8" />
         
-        <!-- Sleek Sports Car Silhouette nested inside D -->
-        <path d="M 115 160 C 135 156 155 152 178 134 C 198 118 238 116 258 132 C 268 140 274 150 274 160 C 262 160 258 152 246 152 C 234 152 228 160 206 160 C 192 160 184 152 172 152 C 160 152 152 160 115 160 Z" stroke="url(#metalGold)" stroke-width="3.5" stroke-linecap="round" fill="none" />
-        <circle cx="246" cy="158" r="6" fill="#fff0bd" />
-        <circle cx="172" cy="158" r="6" fill="#fff0bd" />
+        <!-- Sleek Sports Car Silhouette -->
+        <path d="M 130 156 C 148 152 165 148 184 134 C 202 120 236 118 254 132 C 263 140 268 148 268 156 C 258 156 254 148 244 148 C 234 148 228 156 210 156 C 198 156 190 148 180 148 C 170 148 162 156 130 156 Z" stroke="url(#metalGold)" stroke-width="3" stroke-linecap="round" fill="none" />
+        <circle cx="244" cy="154" r="5" fill="#fff0bd" />
+        <circle cx="180" cy="154" r="5" fill="#fff0bd" />
 
-        <!-- Floating Emblem 'P' Inside Core -->
-        <path d="M 152 172 L 165 172 C 174 172 180 177 180 183 C 180 189 174 194 165 194 L 158 194 L 158 206 L 152 206 Z M 158 178 L 158 188 L 164 188 C 168 188 172 186 172 183 C 172 180 168 178 164 178 Z" fill="#ffffff" />
+        <!-- Floating Emblem 'P' -->
+        <path d="M 148 110 L 160 110 C 168 110 174 114 174 120 C 174 126 168 130 160 130 L 154 130 L 154 142 L 148 142 Z M 154 115 L 154 125 L 160 125 C 163 125 167 123 167 120 C 167 117 163 115 160 115 Z" fill="#ffffff" />
       </svg>
 
       <div class="splash-text-wrap">
-        <div class="splash-main-title">DAWWAAR</div>
-        <div class="splash-sub-title">PARKING</div>
+        <div class="splash-main-title">دوَّر</div>
+        <div class="splash-sub-title">SMART PARKING</div>
       </div>
     </div>
   </div>
@@ -1231,7 +1228,7 @@
   </div>
   <div class="footer-bottom">
     <div>Smart Parking Concept · Course Prototype · © 2026</div>
-    <div>Developed by <b>Salma Ahmed</b>[cite: 1]</div>
+    <div>Developed by <b>Salma Ahmed</b></div>
   </div>
 </footer>
 
