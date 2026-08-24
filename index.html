@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>دوَّر | DAWWAR — Smart Parking</title>
+
+<!-- FAVICON -->
+<link rel="icon" type="image/png" href="logo.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@300;400;500;700&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
 <style>
@@ -51,17 +55,17 @@
     *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
   }
 
-  /* ---------- EXACT CINEMATIC SPLASH BANNER ---------- */
+  /* ---------- CINEMATIC SPLASH SCREEN & 3D LOGO ---------- */
   .splash-screen {
     position: fixed;
     inset: 0;
-    background: #000000;
+    background: radial-gradient(circle at center, #151310 0%, #050505 80%, #000000 100%);
     z-index: 99999;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1), visibility 1.1s;
-    overflow: hidden;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
   }
   .splash-screen.fade-out {
     opacity: 0;
@@ -69,110 +73,128 @@
     pointer-events: none;
   }
 
-  .splash-banner-container {
+  .splash-logo-wrap {
     position: relative;
-    width: 100%;
-    max-width: 1250px;
-    height: 480px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    border-radius: 24px;
-    overflow: hidden;
-    background: 
-      radial-gradient(ellipse at center, rgba(30, 26, 20, 0.95) 0%, rgba(10, 9, 8, 0.98) 60%, #000000 100%),
-      repeating-radial-gradient(circle at 50% 50%, rgba(205,164,52,0.03) 0, rgba(205,164,52,0.03) 1px, transparent 1px, transparent 4px);
-    box-shadow: 0 0 80px rgba(0,0,0,0.95), inset 0 0 60px rgba(0,0,0,0.8);
-    opacity: 0;
-    transform: scale(0.92);
-    filter: blur(8px);
-    animation: bannerFadeIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
-  }
-  @keyframes bannerFadeIn {
-    to {
-      opacity: 1;
-      transform: scale(1);
-      filter: blur(0);
-    }
-  }
-
-  /* Left & Right Luxury Golden Curved Waves */
-  .gold-wave {
-    position: absolute;
-    width: 420px;
-    height: 100%;
-    pointer-events: none;
-    z-index: 2;
-  }
-  .gold-wave.left {
-    left: -40px;
-    top: 0;
-    transform: rotate(5deg);
-  }
-  .gold-wave.right {
-    right: -40px;
-    top: 0;
-    transform: scaleX(-1) rotate(5deg);
-  }
-
-  /* Central Logo & Typography */
-  .splash-center-content {
-    position: relative;
-    z-index: 5;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    transform: scale(0.65) translateY(20px);
+    filter: blur(15px);
+    animation: logoEmerge 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.15s;
+  }
+  @keyframes logoEmerge {
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      filter: blur(0px);
+    }
   }
 
-  .splash-center-content svg.main-logo-svg {
-    width: clamp(240px, 32vw, 360px);
+  .splash-emblem {
+    position: relative;
+    width: 210px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .emblem-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.9)) drop-shadow(0 0 25px rgba(205,164,52,0.3));
+  }
+
+  .speed-car {
+    position: absolute;
+    bottom: 48px;
+    right: 28px;
+    width: 115px;
     height: auto;
-    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.95)) drop-shadow(0 0 35px rgba(205,164,52,0.35));
-    animation: emblemPulse 3.5s ease-in-out infinite alternate;
+    opacity: 0;
+    transform: translateX(120px) scaleX(0.7);
+    filter: blur(8px) drop-shadow(0 0 15px var(--gold-light));
+    animation: speedCarDash 0.75s cubic-bezier(0.2, 0.9, 0.3, 1) forwards 0.45s;
   }
-  @keyframes emblemPulse {
-    0% { filter: drop-shadow(0 20px 40px rgba(0,0,0,0.95)) drop-shadow(0 0 25px rgba(205,164,52,0.25)); }
-    100% { filter: drop-shadow(0 20px 40px rgba(0,0,0,0.95)) drop-shadow(0 0 45px rgba(242,217,138,0.55)); }
+  @keyframes speedCarDash {
+    0% {
+      opacity: 0;
+      transform: translateX(130px) scaleX(1.3);
+      filter: blur(10px) brightness(2.5);
+    }
+    60% {
+      opacity: 1;
+      filter: blur(2px) brightness(1.6);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) scaleX(1);
+      filter: blur(0) drop-shadow(0 0 10px rgba(242,217,138,0.7));
+    }
   }
 
-  .splash-text-wrap {
+  .logo-flash {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(242,217,138,0.8) 0%, rgba(205,164,52,0.2) 40%, transparent 70%);
+    opacity: 0;
+    transform: scale(0.2);
+    pointer-events: none;
+    animation: flashBurst 0.6s ease-out forwards 0.9s;
+  }
+  @keyframes flashBurst {
+    0% { opacity: 0.9; transform: scale(0.3); }
+    100% { opacity: 0; transform: scale(1.6); }
+  }
+
+  .splash-text-group {
     text-align: center;
     margin-top: 15px;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: textAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.7s;
   }
-  .splash-main-title {
-    font-family: 'Cairo', sans-serif;
-    font-size: clamp(38px, 5.2vw, 62px);
+  @keyframes textAppear {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .splash-brand-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 38px;
     font-weight: 900;
-    letter-spacing: 4px;
-    color: #e2e8f0;
-    background: linear-gradient(180deg, #ffffff 15%, #c8cdd4 55%, #7e848d 100%);
+    letter-spacing: 12px;
+    color: #e5e5e5;
+    background: linear-gradient(180deg, #ffffff 20%, #b8b8b8 70%, #757575 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 4px 14px rgba(0,0,0,0.9));
+    text-transform: uppercase;
+    margin-right: -12px;
   }
-  .splash-sub-title {
+  .splash-brand-sub {
     font-family: 'Montserrat', sans-serif;
-    font-size: clamp(12px, 1.6vw, 16px);
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 16px;
-    margin-right: -16px;
+    letter-spacing: 14px;
     color: var(--gold);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
-    margin-top: 6px;
+    gap: 12px;
+    margin-top: 4px;
+    margin-right: -14px;
   }
-  .splash-sub-title::before, .splash-sub-title::after {
+  .splash-brand-sub::before, .splash-brand-sub::after {
     content: "";
-    width: clamp(35px, 6vw, 75px);
-    height: 1.5px;
+    width: 30px;
+    height: 1px;
     background: linear-gradient(90deg, transparent, var(--gold));
   }
-  .splash-sub-title::after {
+  .splash-brand-sub::after {
     background: linear-gradient(90deg, var(--gold), transparent);
   }
 
@@ -270,19 +292,33 @@
     border-bottom:1px solid var(--hairline);
   }
   .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1180px; margin:0 auto; }
-  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand{ display:flex; align-items:center; gap:14px; }
+  
+  /* Brand Badge with 3D Image Logo */
   .brand-badge{
-    width:44px; height:44px; border-radius:12px;
+    width:48px; height:48px; border-radius:14px;
     display:flex; align-items:center; justify-content:center;
-    background:linear-gradient(155deg, var(--gold-light), var(--gold) 55%, var(--gold-deep));
-    color:var(--black); font-family:'Cairo',sans-serif; font-weight:900; font-size:22px;
-    box-shadow:0 4px 18px rgba(205,164,52,0.35);
-    transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+    background:rgba(22, 21, 19, 0.9);
+    border:1px solid rgba(205,164,52,0.3);
+    box-shadow:0 4px 20px rgba(205,164,52,0.25);
+    overflow:hidden;
+    transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s;
+  }
+  .brand-badge img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform 0.4s var(--ease);
   }
   .brand:hover .brand-badge{
-    transform: rotate(10deg) scale(1.08);
-    box-shadow: 0 6px 25px rgba(205,164,52,0.6);
+    transform: rotate(6deg) scale(1.08);
+    border-color:var(--gold);
+    box-shadow: 0 6px 25px rgba(205,164,52,0.5);
   }
+  .brand:hover .brand-badge img{
+    transform:scale(1.1);
+  }
+
   .brand-text .ar{ font-family:'Cairo',sans-serif; font-weight:800; font-size:19px; line-height:1.1;}
   .brand-text .en{ font-size:10.5px; letter-spacing:3px; color:var(--muted); font-family:'Cairo',sans-serif;}
   .nav-links{ display:flex; align-items:center; gap:34px; }
@@ -332,6 +368,8 @@
     cursor:pointer;
   }
   .btn-danger:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(163,74,74,0.5); }
+
+  .mobile-toggle{ display:none; background:none; border:1px solid var(--hairline); color:var(--white); width:40px; height:40px; border-radius:8px; }
 
   /* ---------- hero ---------- */
   .hero{ padding:96px 0 70px; text-align:center; position:relative; z-index:30; }
@@ -828,7 +866,7 @@
   /* ---------- footer ---------- */
   footer{ border-top:1px solid var(--hairline); padding:50px 0 34px; background:rgba(5,5,5,0.85); backdrop-filter:blur(16px); }
   .footer-top{ display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:30px; margin-bottom:34px; }
-  .footer-brand{ display:flex; align-items:center; gap:12px; }
+  .footer-brand{ display:flex; align-items:center; gap:14px; }
   .social-row{ display:flex; gap:12px; }
   .social-btn{
     width:42px; height:42px; border-radius:11px; border:1px solid var(--hairline);
@@ -866,84 +904,55 @@
     .parking-filter-tabs{ gap:8px; }
     .parking-tab{ padding:8px 14px; font-size:12.5px; }
     .drive-lane-badge{ font-size:10px; padding:4px 14px; }
-    .splash-banner-container{ height: 380px; padding: 10px; }
+    .splash-brand-title{ font-size: 26px; }
   }
 </style>
 </head>
 <body>
 
-<!-- EXACT CINEMATIC SPLASH SCREEN -->
+<!-- CINEMATIC SPLASH SCREEN -->
 <div class="splash-screen" id="splashScreen">
-  <div class="splash-banner-container">
-    
-    <!-- Left Golden Decorative Wave -->
-    <svg class="gold-wave left" viewBox="0 0 350 480" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="waveGoldL" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#fff0bd" />
-          <stop offset="40%" stop-color="#cda43a" />
-          <stop offset="80%" stop-color="#7a5c1a" />
-          <stop offset="100%" stop-color="#362805" />
-        </linearGradient>
-      </defs>
-      <path d="M-60 480 C 80 420 180 300 120 160 C 90 90 20 -20 -80 -60 Z" fill="url(#waveGoldL)" opacity="0.85"/>
-      <path d="M-30 480 C 110 390 210 260 160 120 C 120 40 40 -40 -50 -60 Z" stroke="url(#waveGoldL)" stroke-width="4" fill="none" opacity="0.9"/>
-      <path d="M0 480 C 140 360 240 220 190 80 C 160 20 80 -40 -20 -60 Z" stroke="#fff0bd" stroke-width="1.5" fill="none" opacity="0.6"/>
-    </svg>
-
-    <!-- Right Golden Decorative Wave -->
-    <svg class="gold-wave right" viewBox="0 0 350 480" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M-60 480 C 80 420 180 300 120 160 C 90 90 20 -20 -80 -60 Z" fill="url(#waveGoldL)" opacity="0.85"/>
-      <path d="M-30 480 C 110 390 210 260 160 120 C 120 40 40 -40 -50 -60 Z" stroke="url(#waveGoldL)" stroke-width="4" fill="none" opacity="0.9"/>
-      <path d="M0 480 C 140 360 240 220 190 80 C 160 20 80 -40 -20 -60 Z" stroke="#fff0bd" stroke-width="1.5" fill="none" opacity="0.6"/>
-    </svg>
-
-    <!-- Center Emblem with Arabic Letter 'د' & Smart Parking Styling -->
-    <div class="splash-center-content">
-      <svg class="main-logo-svg" viewBox="0 0 320 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <div class="splash-logo-wrap">
+    <div class="logo-flash"></div>
+    <div class="splash-emblem">
+      <!-- 3D Luxury Metallic D Logo SVG -->
+      <svg class="emblem-svg" viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="metalGold" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#fff8db" />
-            <stop offset="30%" stop-color="#dfb84b" />
-            <stop offset="65%" stop-color="#9d7826" />
-            <stop offset="100%" stop-color="#543e0e" />
+          <linearGradient id="goldMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fff0bd" />
+            <stop offset="35%" stop-color="#cda43a" />
+            <stop offset="70%" stop-color="#8a6a22" />
+            <stop offset="100%" stop-color="#544011" />
           </linearGradient>
-          <linearGradient id="metalSilver" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="silverMetal" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#ffffff" />
-            <stop offset="45%" stop-color="#c8cdd4" />
-            <stop offset="75%" stop-color="#8a9099" />
-            <stop offset="100%" stop-color="#464b52" />
+            <stop offset="50%" stop-color="#b0b5bc" />
+            <stop offset="100%" stop-color="#555a60" />
           </linearGradient>
-          <linearGradient id="roadSweep" x1="0%" y1="0%" x2="100%" y2="0%">
+          <linearGradient id="roadGold" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stop-color="#8a6a22" />
-            <stop offset="50%" stop-color="#fff0bd" />
+            <stop offset="50%" stop-color="#f2d98a" />
             <stop offset="100%" stop-color="#cda43a" />
           </linearGradient>
         </defs>
 
-        <!-- Outer Dynamic Arch / Radar Track -->
-        <path d="M 125 24 C 205 24 256 68 256 122 C 256 176 200 204 135 204 C 180 188 218 160 218 122 C 218 80 178 50 125 50 Z" fill="url(#metalSilver)" />
-        
-        <!-- Luxury Arabic Dal 'د' Geometry Integrated with Parking Element -->
-        <path d="M 200 48 C 175 48 125 58 100 102 C 82 135 78 170 120 186 C 160 200 210 195 240 185 L 230 162 C 200 172 155 174 125 162 C 105 152 108 132 120 114 C 138 88 170 76 205 76 Z" fill="url(#metalGold)" />
-        
-        <!-- Curved Roadway Ribbons in Base -->
-        <path d="M 60 205 C 115 162 205 162 260 205 C 205 174 115 174 60 205 Z" fill="url(#roadSweep)" />
-        <path d="M 80 214 C 125 185 195 185 240 214 C 195 194 125 194 80 214 Z" fill="url(#metalGold)" opacity="0.8" />
-        
-        <!-- Sleek Sports Car Silhouette -->
-        <path d="M 130 156 C 148 152 165 148 184 134 C 202 120 236 118 254 132 C 263 140 268 148 268 156 C 258 156 254 148 244 148 C 234 148 228 156 210 156 C 198 156 190 148 180 148 C 170 148 162 156 130 156 Z" stroke="url(#metalGold)" stroke-width="3" stroke-linecap="round" fill="none" />
-        <circle cx="244" cy="154" r="5" fill="#fff0bd" />
-        <circle cx="180" cy="154" r="5" fill="#fff0bd" />
-
-        <!-- Floating Emblem 'P' -->
-        <path d="M 148 110 L 160 110 C 168 110 174 114 174 120 C 174 126 168 130 160 130 L 154 130 L 154 142 L 148 142 Z M 154 115 L 154 125 L 160 125 C 163 125 167 123 167 120 C 167 117 163 115 160 115 Z" fill="#ffffff" />
+        <path d="M 68 35 L 105 35 L 75 145 C 72 155 60 162 48 162 C 58 145 68 90 68 35 Z" fill="url(#goldMetal)" />
+        <path d="M 98 35 C 155 35 192 65 192 105 C 192 145 152 165 105 165 C 138 152 165 132 165 105 C 165 75 135 52 98 52 Z" fill="url(#silverMetal)" />
+        <path d="M 45 168 C 85 135 155 135 195 168 C 155 145 85 145 45 168 Z" fill="url(#roadGold)" />
       </svg>
 
-      <div class="splash-text-wrap">
-        <div class="splash-main-title">دوَّر</div>
-        <div class="splash-sub-title">SMART PARKING</div>
-      </div>
+      <!-- Super-Fast Animated Silhouette Car -->
+      <svg class="speed-car" viewBox="0 0 160 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 5 42 C 25 40 45 38 65 24 C 82 12 118 10 138 22 C 148 28 155 35 155 42 C 145 42 142 36 132 36 C 122 36 118 42 98 42 C 85 42 78 36 68 36 C 58 36 52 42 5 42 Z" stroke="url(#goldMetal)" stroke-width="2.8" stroke-linecap="round" fill="none" />
+        <circle cx="132" cy="40" r="5" fill="#f2d98a" />
+        <circle cx="68" cy="40" r="5" fill="#f2d98a" />
+        <path d="M 145 28 L 158 32" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+      </svg>
+    </div>
+
+    <div class="splash-text-group">
+      <div class="splash-brand-title">DAWWAAR</div>
+      <div class="splash-brand-sub">PARKING</div>
     </div>
   </div>
 </div>
@@ -964,7 +973,9 @@
 <header class="nav">
   <div class="nav-inner">
     <div class="brand">
-      <div class="brand-badge">د</div>
+      <div class="brand-badge">
+        <img src="logo.png" alt="Dawwar Logo">
+      </div>
       <div class="brand-text">
         <div class="ar">دوَّر</div>
         <div class="en">DAWWAR</div>
@@ -1202,7 +1213,9 @@
 <footer class="wrap">
   <div class="footer-top">
     <div class="footer-brand">
-      <div class="brand-badge">د</div>
+      <div class="brand-badge">
+        <img src="logo.png" alt="Dawwar Logo">
+      </div>
       <div class="brand-text">
         <div class="ar">دوَّر</div>
         <div class="en">DAWWAR</div>
@@ -1228,7 +1241,7 @@
   </div>
   <div class="footer-bottom">
     <div>Smart Parking Concept · Course Prototype · © 2026</div>
-    <div>Developed by <b>Salma Ahmed</b></div>
+    <div>Developed by <b>Salma Ahmed</b>[cite: 1]</div>
   </div>
 </footer>
 
@@ -1361,14 +1374,14 @@
     }
   });
 
-  // ---------- SPLASH SCREEN TIMEOUT (3.0 SECONDS) ----------
+  // ---------- SPLASH SCREEN TIMEOUT (2.2 SECONDS FOR CAR ANIMATION) ----------
   window.addEventListener('load', () => {
     setTimeout(() => {
       const splash = document.getElementById('splashScreen');
       if(splash){
         splash.classList.add('fade-out');
       }
-    }, 3000);
+    }, 2200);
   });
 
   // ---------- LIGHT TRAIL WITH MOUSE ----------
@@ -1435,6 +1448,7 @@
 
       layout.appendChild(rowDiv);
 
+      // Insert Drive Lane between Row A & B, and Row B & C
       if(rIndex < rows.length - 1){
         const laneDiv = document.createElement('div');
         laneDiv.className = 'drive-lane';
