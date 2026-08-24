@@ -1,4 +1,9 @@
-إليك الكود بالكامل بدون اختصار أي جزء، مع إضافة كل التأثيرات والأنيميشن التفاعلية (تأثير المنظور المجسم 3D Interactive Perspective، الـ 3D Tilt للبطاقات مع حركة الماوس، إضاءة الـ Spotlight والتوهج النيوني المتحرك لحواف الكروت وشواحن الـ EV، نبضات الرادار اللحظية، أنيميشن الركن التفاعلي للسيارة عند تأكيد الحجز، ولمعان الأزرار المعدني):
+إليك الكود بالكامل بدون اختصار لأي سطر، ومدمج به كل الميزات المطلوبة:
+
+1. **شاشة افتتاحية سينمائية سوداء (Splash Screen):** تظهر أول ما الموقع يفتح، وفيها عبارة **"ركنتك مستنياك.. أهلاً بك في دوَّر"** بتأثير ظهور مبهر من العدم، تكبير ناعم وتوهج ذهبي، وبعدها تختفي بانسيابية لتدخل للموقع.
+2. **ماوس مخصص احترافي (Custom Luxury Cursor):** نقطة وهج مركزية مع هالة ذهبية ناعمة بتكبر لما تقف على الزراير واللينكات وتلغي الماوس التقليدي.
+3. **أثر أنوار وجزيئات مضيئة ورا حركة الماوس (Light Particles Trail):** ذرات نور بتنور وتتلاشى برقة مع كل حركة للماوس.
+4. **تجاوب كامل واحترافي للموبايل (Mobile Responsive UI):** تعديل كامل للشبكة والـ Padding وشبكة الركنات والبطاقات عشان تظهر على شاشة الموبايل بنفس الفخامة والترتيب بدون أي تشويه.
 
 ```html
 <!DOCTYPE html>
@@ -45,12 +50,144 @@
     overflow-x:hidden;
     position:relative;
   }
+  
+  @media (pointer:fine) {
+    body, a, button, select, input {
+      cursor: none !important;
+    }
+  }
+
   h1,h2,h3,h4,.display{font-family:'Cairo',sans-serif;}
 
   ::selection{background:var(--gold);color:var(--black);}
 
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- SPLASH SCREEN ---------- */
+  .splash-screen {
+    position: fixed;
+    inset: 0;
+    background: #000000;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s var(--ease), visibility 0.8s var(--ease);
+  }
+  .splash-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .splash-content {
+    text-align: center;
+    padding: 20px;
+    max-width: 90%;
+  }
+  .splash-logo {
+    width: 65px;
+    height: 65px;
+    border-radius: 18px;
+    background: linear-gradient(155deg, var(--gold-light), var(--gold) 55%, var(--gold-deep));
+    color: var(--black);
+    font-family: 'Cairo', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    box-shadow: 0 0 35px rgba(205,164,52,0.6);
+    opacity: 0;
+    transform: scale(0.3) rotate(-15deg);
+    animation: splashAppear 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
+  }
+  .splash-title {
+    font-size: clamp(28px, 6vw, 54px);
+    font-weight: 900;
+    line-height: 1.35;
+    background: linear-gradient(100deg, #ffffff 10%, var(--gold-light) 50%, var(--gold) 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+    filter: blur(12px);
+    transform: scale(0.85) translateY(20px);
+    animation: splashTextIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s;
+    text-shadow: 0 0 40px rgba(205,164,52,0.3);
+  }
+  .splash-sub {
+    color: var(--muted);
+    font-size: clamp(14px, 2.5vw, 18px);
+    margin-top: 14px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: splashSubIn 0.8s var(--ease) forwards 0.8s;
+    letter-spacing: 1px;
+  }
+  @keyframes splashAppear {
+    to { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+  @keyframes splashTextIn {
+    to { opacity: 1; filter: blur(0px); transform: scale(1) translateY(0); }
+  }
+  @keyframes splashSubIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- CUSTOM CURSOR & LIGHT TRAILS ---------- */
+  .cursor-dot {
+    position: fixed;
+    top: 0; left: 0;
+    width: 8px; height: 8px;
+    background: #ffffff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 100000;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #ffffff, 0 0 20px var(--gold);
+    transition: width .2s, height .2s, background-color .2s;
+  }
+  .cursor-ring {
+    position: fixed;
+    top: 0; left: 0;
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(242, 217, 138, 0.65);
+    background: rgba(205, 164, 52, 0.08);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: width .25s var(--ease), height .25s var(--ease), border-color .25s, transform .08s linear;
+    box-shadow: 0 0 15px rgba(205, 164, 52, 0.2);
+  }
+  .cursor-ring.active {
+    width: 55px;
+    height: 55px;
+    border-color: var(--gold-light);
+    background: rgba(205, 164, 52, 0.22);
+    box-shadow: 0 0 25px rgba(205, 164, 52, 0.5);
+  }
+  .trail-particle {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--gold-light), var(--gold) 60%, transparent);
+    z-index: 99998;
+    transform: translate(-50%, -50%);
+    animation: particleFade 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+  @keyframes particleFade {
+    0% { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.1); }
+  }
+
+  @media (pointer: coarse) {
+    .cursor-dot, .cursor-ring, .trail-particle { display: none !important; }
+    body, a, button, select, input { cursor: auto !important; }
   }
 
   /* ---------- animated moving background ---------- */
@@ -158,7 +295,7 @@
   .btn-gold{
     font-family:'Cairo',sans-serif; font-weight:700; font-size:14.5px;
     color:var(--black); background:linear-gradient(120deg, var(--gold-light), var(--gold));
-    border:none; border-radius:11px; padding:12px 24px; cursor:pointer;
+    border:none; border-radius:11px; padding:12px 24px;
     display:inline-flex; align-items:center; gap:8px;
     box-shadow:0 6px 22px rgba(205,164,52,0.28);
     transition:transform .3s var(--ease), box-shadow .3s var(--ease);
@@ -180,7 +317,7 @@
   .btn-ghost{
     font-family:'Cairo',sans-serif; font-weight:600; font-size:14.5px;
     color:var(--white); background:transparent; border:1px solid var(--hairline);
-    border-radius:11px; padding:11px 22px; cursor:pointer; transition:all .3s var(--ease);
+    border-radius:11px; padding:11px 22px; transition:all .3s var(--ease);
   }
   .btn-ghost:hover{ border-color:var(--gold); background:rgba(205,164,52,0.08); transform: translateY(-2px); }
 
@@ -190,7 +327,7 @@
   .hero{ padding:96px 0 70px; text-align:center; }
   .hero .eyebrow{ margin-bottom:26px; }
   .hero h1{
-    font-size:clamp(32px,5.2vw,58px); font-weight:900; line-height:1.28;
+    font-size:clamp(30px,5.2vw,58px); font-weight:900; line-height:1.28;
     max-width:920px; margin:0 auto 22px;
   }
   .grad-text{
@@ -216,10 +353,10 @@
   .filter-field label{ display:block; font-size:11px; color:var(--muted-dim); margin-bottom:3px; font-family:'Cairo',sans-serif; }
   .filter-field select{
     width:100%; background:transparent; border:none; color:var(--white); font-family:'Tajawal',sans-serif;
-    font-size:14.5px; font-weight:500; outline:none; appearance:none; cursor:pointer;
+    font-size:14.5px; font-weight:500; outline:none; appearance:none;
   }
   .filter-field select option{ background:var(--charcoal); color:var(--white); }
-  .filter-bar .btn-gold{ padding:0 26px; white-space:nowrap; }
+  .filter-bar .btn-gold{ padding:0 26px; white-space:nowrap; justify-content: center; }
 
   /* ---------- dashboard ---------- */
   .dashboard{ padding:70px 0 30px; }
@@ -249,7 +386,7 @@
 
   /* ---------- section header shared ---------- */
   .sec-head{ text-align:center; max-width:640px; margin:0 auto 46px; }
-  .sec-head h2{ font-size:clamp(26px,3.4vw,38px); font-weight:800; margin-top:16px; line-height:1.4; }
+  .sec-head h2{ font-size:clamp(24px,3.4vw,38px); font-weight:800; margin-top:16px; line-height:1.4; }
 
   /* ---------- parking ---------- */
   .parking{ padding:100px 0; perspective: 1400px; }
@@ -288,7 +425,7 @@
   .slot{
     aspect-ratio:1/0.85; border-radius:10px; border:1px solid;
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
-    font-family:'Cairo',sans-serif; font-weight:700; font-size:13px; cursor:default;
+    font-family:'Cairo',sans-serif; font-weight:700; font-size:13px;
     transition:transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s, background-color .3s;
     position:relative; overflow:hidden;
     opacity:0; transform:scale(0.85) translateY(10px);
@@ -298,7 +435,7 @@
 
   .slot svg{ width:16px; height:16px; transition:transform .3s var(--ease); }
   
-  .slot.available{ background:rgba(95,174,126,0.10); border-color:rgba(95,174,126,0.5); color:var(--available); cursor:pointer; }
+  .slot.available{ background:rgba(95,174,126,0.10); border-color:rgba(95,174,126,0.5); color:var(--available); }
   .slot.available::after{
     content:""; position:absolute; inset:-4px; border-radius:12px;
     border:1px dashed var(--available); opacity:0;
@@ -314,7 +451,7 @@
   .slot.reserved{ background:rgba(217,154,61,0.10); border-color:rgba(217,154,61,0.45); color:var(--reserved); }
   .slot.occupied{ background:rgba(163,74,74,0.10); border-color:rgba(163,74,74,0.4); color:var(--occupied); opacity:0.75; }
   
-  .slot.special{ background:rgba(176,135,214,0.10); border-color:rgba(176,135,214,0.5); color:var(--special); cursor:pointer; }
+  .slot.special{ background:rgba(176,135,214,0.10); border-color:rgba(176,135,214,0.5); color:var(--special); }
   .slot.special.ev-slot{
     box-shadow: inset 0 0 12px rgba(176,135,214,0.2);
     animation: electricPulse 3s infinite alternate;
@@ -326,7 +463,6 @@
   .slot.special:hover{ transform:translateY(-6px) scale(1.05); box-shadow:0 10px 24px var(--special-glow); background:rgba(176,135,214,0.22); }
   .slot.special:hover svg{ transform:scale(1.2); }
 
-  /* Animated Car on Booking */
   .slot.booking-animated::before{
     content:"🚗"; position:absolute; font-size:18px;
     top:50%; left:50%; transform:translate(-50%, -150%) scale(0.5);
@@ -436,7 +572,7 @@
     background:radial-gradient(circle, rgba(242,217,138,0.18), transparent 70%);
     top:-150px; right:-100px; animation:orbFloat 18s ease-in-out infinite;
   }
-  .cta-banner h2{ font-size:clamp(24px,3.6vw,36px); font-weight:800; margin-bottom:14px; position:relative; }
+  .cta-banner h2{ font-size:clamp(22px,3.6vw,36px); font-weight:800; margin-bottom:14px; position:relative; }
   .cta-banner p{ color:var(--muted); max-width:520px; margin:0 auto 30px; font-size:15px; line-height:1.8; position:relative; }
 
   /* ---------- footer ---------- */
@@ -457,7 +593,8 @@
   [data-reveal]{ opacity:0; transform:translateY(26px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
   [data-reveal].in{ opacity:1; transform:none; }
 
-  @media (max-width:900px){
+  /* ---------- Responsive Tweaks for Mobile & Tablet ---------- */
+  @media (max-width:992px){
     .nav-links{ display:none; }
     .filter-bar{ grid-template-columns:1fr; }
     .metric-grid{ grid-template-columns:1fr 1fr; }
@@ -465,14 +602,34 @@
     .step-row{ grid-template-columns:1fr; }
     .slot-grid{ grid-template-columns:repeat(4,1fr); }
   }
-  @media (max-width:520px){
+  @media (max-width:600px){
+    .wrap{ padding:0 18px; }
+    .hero{ padding:60px 0 40px; }
+    .dashboard, .parking, .features, .how{ padding:50px 0; }
     .metric-grid, .feat-grid{ grid-template-columns:1fr; }
-    .slot-grid{ grid-template-columns:repeat(3,1fr); }
-    .footer-top{ flex-direction:column; }
+    .slot-grid{ grid-template-columns:repeat(4,1fr); gap:8px; }
+    .grid-panel{ padding:18px 12px; }
+    .floor-bar{ padding:12px 16px; }
+    .cta-banner{ padding:40px 20px; margin:20px auto 60px; }
+    .footer-top{ flex-direction:column; align-items:center; text-align:center; }
+    .footer-bottom{ flex-direction:column; align-items:center; text-align:center; }
   }
 </style>
 </head>
 <body>
+
+<!-- SPLASH SCREEN -->
+<div class="splash-screen" id="splashScreen">
+  <div class="splash-content">
+    <div class="splash-logo">د</div>
+    <h1 class="splash-title">ركنتك مستنياك.. أهلاً بك في دوَّر</h1>
+    <p class="splash-sub">SMART PARKING EXPERIENCE</p>
+  </div>
+</div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
 <div class="bg-scene">
   <div class="beam b1"></div>
@@ -673,7 +830,7 @@
     </div>
     <div class="social-row">
       <a class="social-btn" href="https://www.youtube.com/@DawaarParking" target="_blank" rel="noopener" aria-label="يوتيوب">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.5V8.5l6.3 3.5-6.3 3.5Z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.5V8.5l6.3 3.5-6.3 3.5Z"/></svg>
       </a>
       <a class="social-btn" href="https://www.facebook.com/DawaarParking/" target="_blank" rel="noopener" aria-label="فيسبوك">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg>
@@ -731,6 +888,74 @@
 </div>
 
 <script>
+  // ---------- SPLASH SCREEN TIMEOUT ----------
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const splash = document.getElementById('splashScreen');
+      if(splash){
+        splash.classList.add('fade-out');
+      }
+    }, 2200);
+  });
+
+  // ---------- CUSTOM CURSOR & LIGHT TRAIL ----------
+  const cursorDot = document.getElementById('cursorDot');
+  const cursorRing = document.getElementById('cursorRing');
+  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let ringX = mouseX, ringY = mouseY;
+  let lastTrailTime = 0;
+
+  if (window.matchMedia('(pointer:fine)').matches) {
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+
+      // Create Light trail particles
+      const now = performance.now();
+      if (now - lastTrailTime > 25) {
+        lastTrailTime = now;
+        createTrailParticle(mouseX, mouseY);
+      }
+    });
+
+    function renderRing() {
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+      requestAnimationFrame(renderRing);
+    }
+    requestAnimationFrame(renderRing);
+
+    function createTrailParticle(x, y) {
+      const particle = document.createElement('div');
+      particle.className = 'trail-particle';
+      const size = Math.random() * 8 + 4;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = (x + (Math.random() * 6 - 3)) + 'px';
+      particle.style.top = (y + (Math.random() * 6 - 3)) + 'px';
+      document.body.appendChild(particle);
+
+      setTimeout(() => {
+        particle.remove();
+      }, 700);
+    }
+
+    // Hover effect on interactive elements
+    const interactive = 'a, button, select, .slot.available, .slot.special, .metric-card, .feat-card, .step-card';
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest(interactive)) {
+        cursorRing.classList.add('active');
+      }
+    });
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest(interactive)) {
+        cursorRing.classList.remove('active');
+      }
+    });
+  }
+
   // ---------- generate parking grid ----------
   const rows = ['A','B','C'];
   let slots = [];
@@ -852,8 +1077,8 @@
       const rect = parkingContainer.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
-      const rotateX = -(y / rect.height) * 14;
-      const rotateY = (x / rect.width) * 14;
+      const rotateX = -(y / rect.height) * 12;
+      const rotateY = (x / rect.width) * 12;
       parkingContainer.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
     });
     parkingContainer.addEventListener('mouseleave', ()=>{
