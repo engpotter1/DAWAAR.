@@ -289,26 +289,131 @@
   @keyframes shine{ to{ background-position:200% center; } }
   .hero p.lead{ max-width:640px; margin:0 auto 44px; color:var(--muted); font-size:16.5px; line-height:1.9; }
 
+  /* ---------- LUXURY CUSTOM FILTER BAR & DROPDOWNS ---------- */
   .filter-bar{
-    max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr 1fr auto;
-    gap:12px; background:var(--charcoal); border:1px solid var(--hairline);
-    padding:14px; border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,0.45);
-    transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s;
+    max-width:940px; margin:0 auto; display:grid; grid-template-columns:1.2fr 1fr 1fr auto;
+    gap:12px; background:rgba(22, 21, 19, 0.75); backdrop-filter:blur(20px);
+    border:1px solid var(--hairline); padding:14px; border-radius:20px;
+    box-shadow:0 25px 60px rgba(0,0,0,0.5), 0 0 30px rgba(205,164,52,0.05);
+    position:relative; z-index:40;
   }
-  .filter-bar:hover{
-    box-shadow: 0 25px 70px rgba(205,164,52,0.12);
-    border-color: rgba(205,164,52,0.35);
+
+  .custom-dropdown{
+    position:relative;
+    user-select:none;
   }
-  .filter-field{ text-align:right; padding:6px 14px; border-radius:12px; background:var(--black-soft); border:1px solid transparent; transition:border-color .25s, transform .25s; }
-  .filter-field:hover, .filter-field:focus-within{ border-color:var(--hairline); transform: translateY(-2px); }
-  .filter-field label{ display:block; font-size:11px; color:var(--muted-dim); margin-bottom:3px; font-family:'Cairo',sans-serif; }
-  .filter-field select{
-    width:100%; background:transparent; border:none; color:var(--white); font-family:'Tajawal',sans-serif;
-    font-size:14.5px; font-weight:500; outline:none; appearance:none;
+
+  .custom-dropdown-header{
+    background:var(--black-soft);
+    border:1px solid rgba(205,164,52,0.12);
+    border-radius:14px;
+    padding:8px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
     cursor:pointer;
+    transition:all .3s var(--ease);
   }
-  .filter-field select option{ background:var(--charcoal); color:var(--white); }
-  .filter-bar .btn-gold{ padding:0 26px; white-space:nowrap; justify-content: center; }
+  .custom-dropdown-header:hover, .custom-dropdown.active .custom-dropdown-header{
+    border-color:var(--gold);
+    background:rgba(31, 29, 25, 0.9);
+    box-shadow:0 0 15px rgba(205,164,52,0.15);
+    transform:translateY(-2px);
+  }
+
+  .custom-dropdown-info{
+    text-align:right;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .custom-dropdown-info .field-label{
+    font-size:11px;
+    color:var(--muted-dim);
+    font-family:'Cairo',sans-serif;
+    font-weight:600;
+  }
+  .custom-dropdown-info .selected-val{
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--white);
+    font-family:'Cairo',sans-serif;
+  }
+
+  .custom-dropdown-icon-box{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--gold);
+  }
+  .custom-dropdown-icon-box .field-icon{
+    width:20px; height:20px;
+    opacity:0.85;
+    transition:transform .3s var(--ease);
+  }
+  .custom-dropdown.active .field-icon{
+    transform:scale(1.15);
+    filter:drop-shadow(0 0 8px var(--gold));
+  }
+  .custom-dropdown-icon-box .chevron-icon{
+    width:16px; height:16px;
+    color:var(--muted);
+    transition:transform .35s var(--ease), color .3s;
+  }
+  .custom-dropdown.active .chevron-icon{
+    transform:rotate(180deg);
+    color:var(--gold);
+  }
+
+  .custom-dropdown-list{
+    position:absolute;
+    top:calc(100% + 8px);
+    left:0; right:0;
+    background:rgba(18, 17, 15, 0.95);
+    backdrop-filter:blur(22px);
+    border:1px solid rgba(205,164,52,0.3);
+    border-radius:14px;
+    padding:8px;
+    box-shadow:0 18px 45px rgba(0,0,0,0.8), 0 0 25px rgba(205,164,52,0.12);
+    display:none;
+    flex-direction:column;
+    gap:4px;
+    z-index:100;
+    opacity:0;
+    transform:translateY(-10px) scale(0.96);
+    transition:all .25s var(--ease);
+  }
+  .custom-dropdown.active .custom-dropdown-list{
+    display:flex;
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+
+  .custom-dropdown-item{
+    padding:10px 14px;
+    border-radius:10px;
+    color:var(--muted);
+    font-size:14px;
+    font-weight:600;
+    font-family:'Cairo',sans-serif;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    transition:all .2s var(--ease);
+  }
+  .custom-dropdown-item:hover{
+    background:rgba(205,164,52,0.12);
+    color:var(--gold-light);
+    transform:translateX(-4px);
+  }
+  .custom-dropdown-item.selected{
+    background:linear-gradient(90deg, rgba(205,164,52,0.22), transparent);
+    color:var(--gold-light);
+    border-right:3px solid var(--gold);
+  }
+
+  .filter-bar .btn-gold{ padding:0 26px; white-space:nowrap; justify-content: center; height:100%; border-radius:14px; }
 
   /* ---------- dashboard ---------- */
   .dashboard{ padding:70px 0 30px; }
@@ -444,7 +549,10 @@
   @keyframes modalIn{ from{ opacity:0; transform:translateY(30px) scale(.92);} to{ opacity:1; transform:none;} }
   .modal h3{ font-size:19px; margin-bottom:4px; }
   .modal .modal-sub{ color:var(--muted); font-size:13.5px; margin-bottom:22px; }
-  .modal .filter-field{ margin-bottom:12px; }
+  .modal .filter-field{ margin-bottom:12px; text-align:right; padding:6px 14px; border-radius:12px; background:var(--black-soft); border:1px solid transparent; }
+  .modal .filter-field label{ display:block; font-size:11px; color:var(--muted-dim); margin-bottom:3px; font-family:'Cairo',sans-serif; }
+  .modal .filter-field select{ width:100%; background:transparent; border:none; color:var(--white); font-family:'Tajawal',sans-serif; font-size:14.5px; font-weight:500; outline:none; cursor:pointer; }
+  .modal .filter-field select option{ background:var(--charcoal); color:var(--white); }
   .modal-actions{ display:flex; gap:10px; margin-top:22px; }
   .modal-actions .btn-gold{ flex:1; justify-content:center; }
   .modal-actions .btn-ghost{ flex:1; text-align:center; }
@@ -574,7 +682,7 @@
 <div class="splash-screen" id="splashScreen">
   <div class="splash-content">
     <div class="splash-logo">د</div>
-    <h1 class="splash-title">طريقك أسهل مع دوَّر...اهلا بك</h1>
+    <h1 class="splash-title">🥰طريقك أسهل مع دوَّر...اهلا بك</h1>
     <p class="splash-sub">SMART PARKING EXPERIENCE</p>
   </div>
 </div>
@@ -617,33 +725,68 @@
   <h1>بدل ما تفضل تدوَّر.. <span class="grad-text">ركنتك جاهزة قبل ما توصل</span></h1>
   <p class="lead">شوف الأماكن المتاحة في المولات قبل ما توصل، اختار مكانك واحجزه للمدة اللي محتاجها، ولاقي أماكن ذوي الاحتياجات الخاصة وشواحن الكهرباء بسهولة.</p>
 
+  <!-- CUSTOM LUXURY FILTER BAR -->
   <div class="filter-bar" data-reveal>
-    <div class="filter-field">
-      <label>المول</label>
-      <select id="mallSelect">
-        <option>Mall of Egypt</option>
-        <option>City Centre</option>
-        <option>Downtown Mall</option>
-      </select>
+    
+    <!-- Field 1: Mall -->
+    <div class="custom-dropdown" id="dropdownMall">
+      <div class="custom-dropdown-header" onclick="toggleDropdown('dropdownMall')">
+        <div class="custom-dropdown-info">
+          <span class="field-label">المول</span>
+          <span class="selected-val" id="valMall">Mall of Egypt</span>
+        </div>
+        <div class="custom-dropdown-icon-box">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg>
+          <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+      </div>
+      <div class="custom-dropdown-list">
+        <div class="custom-dropdown-item selected" onclick="selectOption('dropdownMall', 'valMall', 'Mall of Egypt', this)">Mall of Egypt</div>
+        <div class="custom-dropdown-item" onclick="selectOption('dropdownMall', 'valMall', 'City Centre', this)">City Centre</div>
+        <div class="custom-dropdown-item" onclick="selectOption('dropdownMall', 'valMall', 'Downtown Mall', this)">Downtown Mall</div>
+      </div>
     </div>
-    <div class="filter-field">
-      <label>وقت الوصول</label>
-      <select id="arrivalSelect">
-        <option>بعد 15 دقيقة</option>
-        <option selected>بعد 30 دقيقة</option>
-        <option>بعد 45 دقيقة</option>
-        <option>بعد ساعة</option>
-      </select>
+
+    <!-- Field 2: Arrival Time -->
+    <div class="custom-dropdown" id="dropdownArrival">
+      <div class="custom-dropdown-header" onclick="toggleDropdown('dropdownArrival')">
+        <div class="custom-dropdown-info">
+          <span class="field-label">وقت الوصول</span>
+          <span class="selected-val" id="valArrival">بعد 30 دقيقة</span>
+        </div>
+        <div class="custom-dropdown-icon-box">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+      </div>
+      <div class="custom-dropdown-list">
+        <div class="custom-dropdown-item" onclick="selectOption('dropdownArrival', 'valArrival', 'بعد 15 دقيقة', this)">بعد 15 دقيقة</div>
+        <div class="custom-dropdown-item selected" onclick="selectOption('dropdownArrival', 'valArrival', 'بعد 30 دقيقة', this)">بعد 30 دقيقة</div>
+        <div class="custom-dropdown-item" onclick="selectOption('dropdownArrival', 'valArrival', 'بعد 45 دقيقة', this)">بعد 45 دقيقة</div>
+        <div class="custom-dropdown-item" onclick="selectOption('dropdownArrival', 'valArrival', 'بعد ساعة', this)">بعد ساعة</div>
+      </div>
     </div>
-    <div class="filter-field">
-      <label>مدة الركن</label>
-      <select id="durationSelect">
-        <option>ساعة</option>
-        <option selected>ساعتين</option>
-        <option>3 ساعات</option>
-        <option>4 ساعات</option>
-      </select>
+
+    <!-- Field 3: Duration -->
+    <div class="custom-dropdown" id="dropdownDuration">
+      <div class="custom-dropdown-header" onclick="toggleDropdown('dropdownDuration')">
+        <div class="custom-dropdown-info">
+          <span class="field-label">مدة الركن</span>
+          <span class="selected-val" id="valDuration">ساعتين</span>
+        </div>
+        <div class="custom-dropdown-icon-box">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg>
+          <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+      </div>
+      <div class="custom-dropdown-list">
+        <div class="custom-dropdown-item" onclick="selectOption('dropdownDuration', 'valDuration', 'ساعة', this)">ساعة</div>
+        <div class="custom-dropdown-item selected" onclick="selectOption('dropdownDuration', 'valDuration', 'ساعتين', this)">ساعتين</div>
+        <div class="custom-dropdown-item" onclick="selectOption('dropdownDuration', 'valDuration', '3 ساعات', this)">3 ساعات</div>
+        <div class="custom-dropdown-item" onclick="selectOption('dropdownDuration', 'valDuration', '4 ساعات', this)">4 ساعات</div>
+      </div>
     </div>
+
     <button class="btn-gold" onclick="document.getElementById('parking').scrollIntoView({behavior:'smooth'})">دوَّرلي</button>
   </div>
 </section>
@@ -836,6 +979,35 @@
 </div>
 
 <script>
+  // ---------- CUSTOM DROPDOWN LOGIC ----------
+  function toggleDropdown(id) {
+    const target = document.getElementById(id);
+    const isOpen = target.classList.contains('active');
+    closeAllDropdowns();
+    if (!isOpen) {
+      target.classList.add('active');
+    }
+  }
+
+  function selectOption(dropdownId, valDisplayId, value, el) {
+    document.getElementById(valDisplayId).textContent = value;
+    const dropdown = document.getElementById(dropdownId);
+    const items = dropdown.querySelectorAll('.custom-dropdown-item');
+    items.forEach(item => item.classList.remove('selected'));
+    el.classList.add('selected');
+    dropdown.classList.remove('active');
+  }
+
+  function closeAllDropdowns() {
+    document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.custom-dropdown')) {
+      closeAllDropdowns();
+    }
+  });
+
   // ---------- SPLASH SCREEN TIMEOUT ----------
   window.addEventListener('load', () => {
     setTimeout(() => {
