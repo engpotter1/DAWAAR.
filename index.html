@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>دوَّر | DAWWAR — Smart Parking</title>
 
-<!-- FAVICON -->
-<link rel="icon" type="image/png" href="logo.png">
+<!-- EMBEDDED INLINE FAVICON -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 200'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23f2d98a'/><stop offset='50%25' stop-color='%23cda43a'/><stop offset='100%25' stop-color='%238a6a22'/></linearGradient><linearGradient id='s' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23ffffff'/><stop offset='100%25' stop-color='%238a929a'/></linearGradient></defs><path d='M68 35 L105 35 L75 145 C72 155 60 162 48 162 C58 145 68 90 68 35 Z' fill='url(%23g)'/><path d='M98 35 C155 35 192 65 192 105 C192 145 152 165 105 165 C138 152 165 132 165 105 C165 75 135 52 98 52 Z' fill='url(%23s)'/><path d='M45 168 C85 135 155 135 195 168 C155 145 85 145 45 168 Z' fill='url(%23g)'/></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@300;400;500;700&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
@@ -294,20 +294,20 @@
   .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1180px; margin:0 auto; }
   .brand{ display:flex; align-items:center; gap:14px; }
   
-  /* Brand Badge with 3D Image Logo */
+  /* Brand Badge with Vector 3D Logo */
   .brand-badge{
     width:48px; height:48px; border-radius:14px;
     display:flex; align-items:center; justify-content:center;
-    background:rgba(22, 21, 19, 0.9);
-    border:1px solid rgba(205,164,52,0.3);
+    background:rgba(22, 21, 19, 0.95);
+    border:1px solid rgba(205,164,52,0.35);
     box-shadow:0 4px 20px rgba(205,164,52,0.25);
     overflow:hidden;
+    padding:6px;
     transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s;
   }
-  .brand-badge img{
+  .brand-badge svg{
     width:100%;
     height:100%;
-    object-fit:cover;
     transition:transform 0.4s var(--ease);
   }
   .brand:hover .brand-badge{
@@ -315,7 +315,7 @@
     border-color:var(--gold);
     box-shadow: 0 6px 25px rgba(205,164,52,0.5);
   }
-  .brand:hover .brand-badge img{
+  .brand:hover .brand-badge svg{
     transform:scale(1.1);
   }
 
@@ -974,7 +974,24 @@
   <div class="nav-inner">
     <div class="brand">
       <div class="brand-badge">
-        <img src="logo.png" alt="Dawwar Logo">
+        <!-- Inlined Pure Vector Logo -->
+        <svg viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="navGold" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fff0bd" />
+              <stop offset="50%" stop-color="#cda43a" />
+              <stop offset="100%" stop-color="#8a6a22" />
+            </linearGradient>
+            <linearGradient id="navSilver" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="100%" stop-color="#8a929a" />
+            </linearGradient>
+          </defs>
+          <path d="M 68 35 L 105 35 L 75 145 C 72 155 60 162 48 162 C 58 145 68 90 68 35 Z" fill="url(#navGold)" />
+          <path d="M 98 35 C 155 35 192 65 192 105 C 192 145 152 165 105 165 C 138 152 165 132 165 105 C 165 75 135 52 98 52 Z" fill="url(#navSilver)" />
+          <path d="M 45 168 C 85 135 155 135 195 168 C 155 145 85 145 45 168 Z" fill="url(#navGold)" />
+          <path d="M 55 110 C 72 96 110 94 135 105 C 145 110 152 115 152 122 C 142 122 138 116 128 116 C 118 116 114 122 96 122 C 84 122 78 116 68 116 C 60 116 56 122 55 122 Z" stroke="url(#navGold)" stroke-width="3" stroke-linecap="round" fill="none" />
+        </svg>
       </div>
       <div class="brand-text">
         <div class="ar">دوَّر</div>
@@ -1214,7 +1231,12 @@
   <div class="footer-top">
     <div class="footer-brand">
       <div class="brand-badge">
-        <img src="logo.png" alt="Dawwar Logo">
+        <svg viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 68 35 L 105 35 L 75 145 C 72 155 60 162 48 162 C 58 145 68 90 68 35 Z" fill="url(#navGold)" />
+          <path d="M 98 35 C 155 35 192 65 192 105 C 192 145 152 165 105 165 C 138 152 165 132 165 105 C 165 75 135 52 98 52 Z" fill="url(#navSilver)" />
+          <path d="M 45 168 C 85 135 155 135 195 168 C 155 145 85 145 45 168 Z" fill="url(#navGold)" />
+          <path d="M 55 110 C 72 96 110 94 135 105 C 145 110 152 115 152 122 C 142 122 138 116 128 116 C 118 116 114 122 96 122 C 84 122 78 116 68 116 C 60 116 56 122 55 122 Z" stroke="url(#navGold)" stroke-width="3" stroke-linecap="round" fill="none" />
+        </svg>
       </div>
       <div class="brand-text">
         <div class="ar">دوَّر</div>
@@ -1355,10 +1377,7 @@
     currentMall = mallName;
     selectOption('dropdownMall', 'valMall', mallName, el);
     
-    // Update Header title
     document.getElementById('mallHeaderSpan').textContent = `· ${mallName}`;
-    
-    // Re-generate & re-render parking lot for selected mall
     generateSlotsForMall(mallName);
     renderGrid();
     updateCounters();
